@@ -46,20 +46,20 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-lt)}
 
 /* Buttons */
 button{border-radius:0;border:1px solid #a3a3a3;background:var(--bg2);color:var(--ink);padding:9px 24px;font-family:Inter,sans-serif;font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
-button:hover:not(:disabled){background:var(--bg)}
+button:hover:not(:disabled):not(.btn-primary){background:var(--bg)}
 button:disabled{opacity:.4;cursor:not-allowed}
-.btn-primary{background:var(--gold);color:#fff;border-color:var(--gold)}
-.btn-primary:hover{background:#9a7820}
+.btn-primary{background:var(--gold);color:#fff;border-color:var(--gold);transition:background .2s}
+.btn-primary:hover{background:#3d2e08}
 .btn-dark{background:var(--th-bg);color:var(--bg);border-color:var(--th-bg)}
 
 /* Metrics grid */
 .metrics-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:12px}
-.metric-card{background:rgba(255,255,255,.92);box-shadow:var(--shadow-sm);padding:20px}
+.metric-card{background:rgba(255,255,255,.92);box-shadow:var(--shadow-sm);padding:14px}
 [data-theme="dark"] .metric-card{background:rgba(46,46,56,.95)}
 .metric-card:nth-child(even){background:rgba(240,236,228,.65)}
 [data-theme="dark"] .metric-card:nth-child(even){background:rgba(38,38,48,.95)}
-.metric-label{color:var(--ink50);font-size:.62rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
-.metric-value{margin-top:8px;color:var(--gold);font-size:1.4rem;font-weight:600;line-height:1.1}
+.metric-label{color:var(--ink50);font-size:.58rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
+.metric-value{margin-top:6px;color:var(--gold);font-size:1rem;font-weight:600;line-height:1.1}
 
 /* Bars */
 .bars-box{background:var(--bg2);border:1px solid var(--border);padding:20px}
@@ -161,7 +161,7 @@ tbody tr:hover{background:var(--rust-lt)}
     <div class="actions">
       <button onclick="showSaveModal()">Guardar</button>
       <button onclick="clearPoem()">Limpiar</button>
-      <button id="btn-back" style="display:none" onclick="showInput()">← Volver</button>
+      <button onclick="copyPoem()">Copiar</button>
       <button class="btn-primary" style="margin-left:auto" onclick="analyzePoem()">Analizar →</button>
     </div>
   </div>
@@ -240,7 +240,7 @@ tbody tr:hover{background:var(--rust-lt)}
     <div class="footer-sep"></div>
     <span><span class="dieresis-mark">D</span> Diéresis</span>
     <div class="footer-right">
-      <span>© 2026 Verbium v12.1</span>
+      <span>© 2026 Verbium v13.0</span>
       <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">🌙</button>
     </div>
   </div>
@@ -272,6 +272,18 @@ tbody tr:hover{background:var(--rust-lt)}
     <div class="modal-actions">
       <button onclick="closeRenameModal()">Cancelar</button>
       <button class="btn-dark" onclick="confirmRename()">Renombrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete confirmation modal -->
+<div id="delete-modal" class="modal hidden">
+  <div class="modal-card">
+    <h2>Eliminar poema</h2>
+    <p id="delete-modal-msg">¿Seguro que quieres eliminar este poema?</p>
+    <div class="modal-actions">
+      <button onclick="closeDeleteModal()">Cancelar</button>
+      <button style="background:#8b3a0f;color:#fff;border-color:#8b3a0f" onclick="confirmDelete()">Eliminar</button>
     </div>
   </div>
 </div>
@@ -673,9 +685,15 @@ const $ = id => document.getElementById(id);
 /* ── Main analyze ───────────────────────────────────────── */
 function analyzePoem() {
   const raw = $('poem-input').value.trim();
-  if (!raw) { alert('Por favor escribe algunos versos para analizar.'); return; }
+  if (!raw) { $('results').style.display='none'; return; }
   const cleaned = cleanPoemText(raw);
-  if (cleaned !== raw) { $('poem-input').value = cleaned; }
+  if (cleaned !== raw) {
+    const start = $('poem-input').selectionStart;
+    const end   = $('poem-input').selectionEnd;
+    $('poem-input').value = cleaned;
+    $('poem-input').selectionStart = start;
+    $('poem-input').selectionEnd   = end;
+  }
   const text = cleaned;
 
   const results = text.split('\n').map(line => {
@@ -754,7 +772,6 @@ function analyzePoem() {
   }
 
   $('results').style.display='flex';
-  $('btn-back').style.display='';
 }
 
 
@@ -794,11 +811,9 @@ function deletePoemFromStorage(id) {
 }
 function clearAllPoems() {
   if (!getSavedPoems().length) { showToast('No hay poemas guardados'); return; }
-  if (confirm('¿Eliminar TODOS los poemas guardados?')) {
-    localStorage.removeItem(STORAGE_KEY);
-    updateSavedPanel();
-    showToast('🗑️ Poemas eliminados');
-  }
+  localStorage.removeItem(STORAGE_KEY);
+  updateSavedPanel();
+  showToast('Poemas eliminados');
 }
 function updateSavedPanel() {
   const poems = getSavedPoems();
@@ -809,7 +824,7 @@ let selectedFileId = null;
 
 function renderFileBrowser(poems) {
   const grid = $('files-grid');
-  const empty = $('files-empty');
+  const empty = null;
   const actions = $('saved-actions');
   const counter = $('file-count-label');
   if (counter) counter.textContent = poems.length + (poems.length===1?' poema':' poemas');
@@ -882,11 +897,15 @@ function deleteSelectedFile() {
   if (!selectedFileId) return;
   const poem = getSavedPoems().find(p=>p.id===selectedFileId);
   if (!poem) return;
-  if (confirm('¿Eliminar "'+poem.name+'"?')) {
-    deletePoemFromStorage(selectedFileId);
-    selectedFileId=null;
-    showToast('Eliminado');
-  }
+  $('delete-modal-msg').textContent = '¿Seguro que quieres eliminar "' + poem.name + '"?';
+  $('delete-modal').classList.remove('hidden');
+}
+function closeDeleteModal() { $('delete-modal').classList.add('hidden'); }
+function confirmDelete() {
+  closeDeleteModal();
+  deletePoemFromStorage(selectedFileId);
+  selectedFileId = null;
+  showToast('Eliminado');
 }
 function loadPoem(id) {
   const poem = getSavedPoems().find(p=>p.id===id);
@@ -894,7 +913,6 @@ function loadPoem(id) {
   $('poem-input').value = poem.text;
   $('verse-count').textContent = poem.text.split('\n').filter(l=>l.trim()).length;
   $('results').style.display='none';
-  $('btn-back').style.display='none';
   currentResults = null;
   showToast(`Cargado: ${poem.name}`);
 }
@@ -958,12 +976,29 @@ function cleanPoemText(text) {
   .trim();
 }
 
+
+/* ── Copy poem ──────────────────────────────────────────── */
+function copyPoem() {
+  const text = $('poem-input').value.trim();
+  if (!text) { showToast('No hay texto para copiar'); return; }
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('✓ Copiado al portapapeles');
+  }).catch(() => {
+    // Fallback
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('✓ Copiado al portapapeles');
+  });
+}
+
 /* ── Clear ──────────────────────────────────────────────── */
 function clearPoem() {
   $('poem-input').value='';
   $('results').style.display='none';
-  $('btn-back').style.display='none';
-  $('ritmo-box').style.display='none';
   currentResults=null;
 }
 
@@ -975,7 +1010,13 @@ function debounceAnalyze() {
   $('verse-count').textContent = poemInput.value.split('\n').filter(l=>l.trim()).length;
   clearTimeout(_debounceTimer);
   if (!poemInput.value.trim()) { $('results').style.display='none'; return; }
-  _debounceTimer = setTimeout(() => { analyzePoem(); }, 600);
+  const savedStart = poemInput.selectionStart;
+  const savedEnd   = poemInput.selectionEnd;
+  _debounceTimer = setTimeout(() => {
+    analyzePoem();
+    // Restore cursor after analysis
+    try { poemInput.selectionStart = savedStart; poemInput.selectionEnd = savedEnd; } catch(e){}
+  }, 600);
 }
 
 poemInput.addEventListener('input', debounceAnalyze);
