@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ── SEO Primary ─────────────────────────────────────── -->
+<title>Verbium — Analizador Métrico de Poesía en Español</title>
+<meta name="description" content="Verbium analiza la métrica de tus versos en español: cuenta sílabas, detecta sinalefas, hiatos, rima asonante y consonante. Herramienta gratuita para poetas y escritores.">
+<meta name="keywords" content="análisis métrico, contar sílabas, sinalefa, poesía española, métrica española, rima asonante, rima consonante, endecasílabo, octosílabo, verso libre, herramienta poesía">
+<meta name="author" content="Verbium">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://lynleon-ops.github.io/verbium/">
+
+<!-- ── Open Graph (redes sociales) ────────────────────── -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lynleon-ops.github.io/verbium/">
+<meta property="og:title" content="Verbium — Analizador Métrico de Poesía en Español">
+<meta property="og:description" content="Analiza la métrica de tus versos: sílabas, sinalefas, hiatos, rima asonante y consonante. Gratuito para poetas y escritores en español.">
+<meta property="og:locale" content="es_ES">
+<meta property="og:site_name" content="Verbium">
+
+<meta property="og:image" content="https://lynleon-ops.github.io/verbium/og-verbium.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<!-- ── Twitter Card ────────────────────────────────────── -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Verbium — Analizador Métrico de Poesía en Español">
+<meta name="twitter:description" content="Analiza la métrica de tus versos: sílabas, sinalefas, hiatos, rima asonante y consonante. Gratuito para poetas y escritores.">
+
+<!-- ── Schema.org WebApplication ──────────────────────── -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Verbium",
+  "url": "https://lynleon-ops.github.io/verbium/",
+  "description": "Analizador métrico de poesía en español. Cuenta sílabas, detecta sinalefas, hiatos, rima asonante y consonante.",
+  "applicationCategory": "EducationApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "inLanguage": "es",
+  "keywords": "métrica, sílabas, sinalefa, poesía, rima, endecasílabo",
+  "author": {
+    "@type": "Organization",
+    "name": "Verbium"
+  }
+}
+</script>
+<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Cormorant+Garamond:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg:#f7f4ef; --bg2:#fff; --ink:#1c1a16; --ink50:rgba(28,26,22,.5); --ink30:rgba(28,26,22,.3);
+  --gold:#a67c20; --gold-lt:rgba(166,124,32,.12); --rust:#8b3a0f; --rust-lt:rgba(139,58,15,.08);
+  --border:rgba(28,26,22,.1); --border-md:rgba(28,26,22,.18);
+  --shadow-sm:0 1px 4px rgba(28,26,22,.08); --shadow-md:0 4px 16px rgba(28,26,22,.1); --shadow-lg:0 8px 32px rgba(28,26,22,.12);
+  --th-bg:#1c1a16; --radius:0px;
+}
+[data-theme="dark"] {
+  --bg:#1e1e24; --bg2:#26262e; --bg3:#2e2e38;
+  --ink:#f0ede8; --ink50:rgba(240,237,232,.55); --ink30:rgba(240,237,232,.3);
+  --gold:#e0b050; --gold-lt:rgba(224,176,80,.14); --rust:#e07848; --rust-lt:rgba(224,120,72,.1);
+  --border:rgba(240,237,232,.12); --border-md:rgba(240,237,232,.2);
+  --shadow-sm:0 1px 4px rgba(0,0,0,.3); --shadow-md:0 4px 16px rgba(0,0,0,.35); --shadow-lg:0 8px 32px rgba(0,0,0,.4);
+  --th-bg:#16161c;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.app{width:min(96%,1200px);margin:20px auto;display:flex;flex-direction:column;gap:8px}
+
+/* Header */
+.header{background:var(--bg2);border:1px solid var(--border);border-top:3px solid var(--gold);padding:0;overflow:visible}
+
+
+
+h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:500;letter-spacing:.38em;line-height:1;color:var(--ink);text-transform:uppercase;margin:0}
+h1 em{font-style:normal;color:var(--gold)}
+
+
+
+
+/* Input box */
+.box{background:var(--bg2);border:1px solid var(--border);padding:24px;width:100%}
+h2{color:var(--rust);font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.16em;margin:0 0 16px;display:block}
+textarea{width:100%;min-height:160px;resize:vertical;background:var(--bg2);border:1px solid var(--border);padding:16px;color:var(--ink);font:inherit;font-size:.95rem;line-height:1.6;outline:none}
+textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-lt)}
+.actions{display:flex;flex-wrap:wrap;gap:8px;padding-top:12px}
+.status{min-height:18px;padding-top:8px;font-size:12px;letter-spacing:.04em;color:var(--ink50)}
+
+/* Buttons */
+button{border-radius:0;border:1px solid #a3a3a3;background:var(--bg2);color:var(--ink);padding:9px 24px;font-family:Inter,sans-serif;font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+button:hover:not(:disabled):not(.btn-primary):not(.btn-dark){background:var(--bg)}
+button:disabled{opacity:.4;cursor:not-allowed}
+.btn-primary{background:var(--gold);color:#fff;border-color:var(--gold);transition:background .2s}
+.btn-primary:hover{background:#3d2e08}
+.btn-dark{background:var(--th-bg);color:var(--bg);border-color:var(--th-bg);transition:background .15s,transform .1s}
+.btn-dark:hover{background:#3a3a4a;color:#fff;border-color:#3a3a4a}
+.btn-dark:active{background:#111118;transform:scale(.97)}
+
+/* Metrics grid */
+.metrics-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:12px}
+.metric-card{background:rgba(255,255,255,.92);box-shadow:var(--shadow-sm);padding:14px}
+[data-theme="dark"] .metric-card{background:rgba(46,46,56,.95)}
+.metric-card:nth-child(even){background:rgba(240,236,228,.65)}
+[data-theme="dark"] .metric-card:nth-child(even){background:rgba(38,38,48,.95)}
+.metric-label{color:var(--ink50);font-size:.58rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
+.metric-value{margin-top:6px;color:var(--gold);font-size:1rem;font-weight:600;line-height:1.1}
+
+/* Bars */
+.bars-box{background:var(--bg2);border:1px solid var(--border);padding:20px}
+.bars{height:280px;display:flex;align-items:flex-end;gap:4px;overflow-x:auto;padding-bottom:4px}
+.bar-item{display:flex;min-width:44px;flex:1 0 44px;flex-direction:column;align-items:center;gap:4px}
+.bar-area{height:180px;width:100%;display:flex;align-items:flex-end}
+.bar-fill{width:100%;min-height:4px;background:var(--gold)}
+.bar-top-num{font-size:11px;font-weight:700;color:var(--ink50)}
+
+.bar-lbl{font-size:9px;font-weight:600;text-align:center;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.empty{align-self:center;color:var(--ink50);font-size:14px}
+
+/* Table */
+
+table{width:100%;min-width:980px;table-layout:fixed;border-collapse:separate;border-spacing:0;text-align:left;font-size:14px}
+thead th{background:var(--th-bg);color:var(--bg);border:0;padding:12px 16px;font-size:.68rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase}
+tbody td{border:0;padding:16px;vertical-align:top}
+tbody tr{background:rgba(255,255,255,.92)}
+[data-theme="dark"] tbody tr{background:rgba(46,46,56,.95)}
+tbody tr:nth-child(even){background:rgba(240,236,228,.55)}
+[data-theme="dark"] tbody tr:nth-child(even){background:rgba(38,38,48,.95)}
+tbody tr:hover{background:var(--rust-lt)}
+
+
+
+.td-rhyme{font-weight:700;color:var(--gold)}
+.sinalefa-mark{color:var(--gold);font-weight:600}
+.hiato-mark{color:#1e3a8a;font-weight:600}
+.hiato-met-mark{color:#1d4ed8;font-weight:600}
+.sineresis-mark{color:#15803d;font-weight:600}
+.dieresis-mark{color:#7e22ce;font-weight:600}
+
+/* Acento Rítmico */
+
+
+/* File browser */
+.saved-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:4px}
+.saved-empty,.file-empty{grid-column:1/-1;padding:32px 16px;color:var(--ink50);font-size:.85rem;text-align:center;letter-spacing:.04em;font-style:italic}
+.saved-card{display:flex;flex-direction:column;align-items:center;gap:0;background:rgba(255,255,255,.92);box-shadow:var(--shadow-sm);padding:12px 8px 10px;cursor:pointer;border-bottom:2px solid transparent}
+[data-theme="dark"] .saved-card{background:rgba(46,46,56,.95)}
+.saved-card:nth-child(even){background:rgba(240,236,228,.65)}
+[data-theme="dark"] .saved-card:nth-child(even){background:rgba(38,38,48,.95)}
+.saved-card:hover{background:var(--gold-lt);box-shadow:var(--shadow-md)}
+.saved-card.selected{background:var(--gold-lt);border-bottom:2px solid var(--gold)}
+.file-icon-wrap{position:relative;width:86px;height:104px;flex:0 0 104px;display:block}
+.file-body{width:86px;height:104px;background:var(--bg2);border:1.5px solid var(--border-md);position:absolute;top:0;left:0}
+.file-fold-cover{width:26px;height:26px;background:var(--bg2);position:absolute;top:0;right:0;clip-path:polygon(0 0,100% 0,0 100%);border-top:1.5px solid var(--border-md);border-left:1.5px solid var(--border-md);z-index:2}
+.file-fold{width:26px;height:26px;background:var(--bg);position:absolute;top:0;right:0;clip-path:polygon(0 100%,100% 100%,0 0);z-index:1}
+.file-lines{position:absolute;top:30px;left:10px;right:10px;display:flex;flex-direction:column;gap:6px}
+.file-line{height:1.5px;background:var(--border-md)}
+.file-line.gold{background:var(--gold);opacity:.7}
+.saved-info{width:100%;text-align:center}
+.saved-name{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.82rem;font-weight:700;color:rgb(139,58,15);text-align:center;width:100%;margin-top:6px}
+.saved-date, .file-date{display:none}
+.saved-actions{display:flex;gap:8px;padding:12px 0 4px;flex-wrap:wrap}
+
+/* Footer */
+.footer{background:var(--bg2);border:1px solid var(--border);border-bottom:2px solid var(--gold);padding:16px 20px;font-size:13px;letter-spacing:.04em;display:flex;gap:12px;align-items:center;flex-wrap:wrap;color:var(--ink50)}
+.footer-sep{width:1px;height:12px;background:var(--border-md)}
+.footer-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--th-bg);color:var(--bg);padding:10px 20px;font-size:13px;font-weight:500;opacity:0;transition:all .3s;pointer-events:none;z-index:100}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Modal */
+.modal{position:fixed;inset:0;z-index:50;display:flex;align-items:flex-start;justify-content:center;padding:180px 16px 0;background:rgba(0,0,0,.2)}
+.modal.hidden{display:none}
+.modal-card{width:100%;max-width:340px;border:1px solid var(--border-md);background:var(--bg2);padding:16px;box-shadow:0 25px 50px rgba(0,0,0,.25)}
+.modal-card h2{margin:0 0 8px;color:var(--ink);font-size:12px}
+.modal-card p{margin:0 0 12px;color:var(--ink50);font-size:12px}
+.modal-card input{width:100%;border:1px solid var(--border-md);background:var(--bg2);color:var(--ink);padding:9px 12px;font-size:14px;outline:none}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+
+/* Theme toggle */
+.theme-toggle{background:none;border:1px solid var(--border);padding:6px 10px;font-size:14px;cursor:pointer;color:var(--ink)}
+
+/* Responsive */
+@media(max-width:900px){.metrics-grid{grid-template-columns:repeat(2,1fr)}.saved-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){h1{letter-spacing:.18em}.box{padding:16px}.saved-grid{grid-template-columns:1fr}.metrics-grid{grid-template-columns:1fr 1fr}.actions button{flex:1}}
+</style>
+</head>
+<body data-theme="light">
+
+<div class="app">
+
+
+
+  <!-- Header -->
+  <div class="header" style="min-height:80px;display:flex;align-items:center;padding:8px 24px">
+    <div style="padding:14px 24px 10px;display:flex;flex-direction:column;align-items:flex-start">
+      <div style="display:flex;align-items:center;line-height:1">
+        
+        <span style="margin-left:0;font-family:'Cormorant Garamond',Georgia,serif;font-size:2.4rem;font-weight:500;letter-spacing:.32em;text-transform:uppercase;color:var(--ink);line-height:1">V<span style="color:#b8922a">erb</span>ium</span>
+      </div>
+      <div style="font-size:9.5px;text-transform:uppercase;letter-spacing:.38em;color:var(--ink50);margin-top:4px;padding-left:2px">Cada Sílaba Cuenta</div>
+    </div>
+  </div>
+  <div class="box">
+    <h2>Escribe o pega tu poema</h2>
+    <textarea id="poem-input" placeholder="Pega o escribe aquí tu poema..."></textarea>
+    <div class="status" id="status-bar">Versos: <span id="verse-count">0</span></div>
+    <div class="actions">
+      <button onclick="showSaveModal()">Guardar</button>
+      <button onclick="clearPoem()">Limpiar</button>
+      <button onclick="copyPoem()">Copiar</button>
+      <button class="btn-primary" style="margin-left:auto" onclick="analyzePoem()">Analizar →</button>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div id="results" style="display:none;flex-direction:column;gap:8px">
+
+    <!-- Metrics -->
+    <div class="box" style="padding:0">
+      <div style="padding:16px 24px">
+        <h2 style="margin:0">Métricas Generales</h2>
+      </div>
+      <div style="padding:16px 24px">
+        <div class="metrics-grid" id="metrics-grid"></div>
+      </div>
+    </div>
+
+    <!-- Bars -->
+    <div class="bars-box">
+      <h2>Distribución silábica</h2>
+      <div class="bars" id="bars-container"></div>
+    </div>
+
+    <!-- Table -->
+    <div style="background:#fff;border:1px solid rgba(28,26,22,.1);width:100%;box-sizing:border-box;overflow:hidden">
+      <div style="padding:16px 24px;border-bottom:0">
+        <h2 style="margin:0;color:#8b3a0f;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.16em">División Silábica</h2>
+      </div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;min-width:700px;border-collapse:collapse;font-size:14px;table-layout:fixed">
+          <thead>
+            <tr>
+              <th style="width:3rem;padding:12px 16px;text-align:left;background:#1c1a16;color:#f7f4ef;font-size:.68rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase">#</th>
+              <th style="width:32%;padding:12px 16px;text-align:left;background:#1c1a16;color:#f7f4ef;font-size:.68rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase">Verso</th>
+              <th style="width:38%;padding:12px 16px;text-align:left;background:#1c1a16;color:#f7f4ef;font-size:.68rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase">División silábica</th>
+              <th style="width:5rem;padding:12px 16px;text-align:left;background:#1c1a16;color:#f7f4ef;font-size:.68rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase">Sílabas</th>
+              <th style="width:4rem;padding:12px 16px;text-align:left;background:#1c1a16;color:#f7f4ef;font-size:.68rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase">Rima</th>
+            </tr>
+          </thead>
+          <tbody id="results-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- File browser -->
+  <div class="box" style="padding:0">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 24px">
+      <h2 style="margin:0">Poemas Guardados</h2>
+      <span id="file-count-label" style="font-size:12px;color:var(--ink50);letter-spacing:.04em"></span>
+    </div>
+    <div style="padding:16px 24px">
+      <div class="saved-grid" id="files-grid"><div class="saved-empty">No hay poemas guardados aún</div></div>
+      <div class="saved-actions" id="saved-actions" style="display:none;padding-top:12px">
+        <button onclick="loadSelectedFile()">Cargar</button>
+        <button onclick="renameSelectedFile()">Renombrar</button>
+        <button onclick="deleteSelectedFile()" style="color:var(--rust)">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <span>‿ Sinalefa</span>
+    <div class="footer-sep"></div>
+    <span>. Sílaba</span>
+    <div class="footer-sep"></div>
+    <span>/ Palabra</span>
+    <div class="footer-sep"></div>
+    <span><span class="hiato-mark">H</span> Hiato</span>
+    <div class="footer-sep"></div>
+    <span><span class="hiato-met-mark">↗</span> Hiato métrico</span>
+    <div class="footer-sep"></div>
+    <span><span class="sineresis-mark">S</span> Sinéresis</span>
+    <div class="footer-sep"></div>
+    <span><span class="dieresis-mark">D</span> Diéresis</span>
+    <div class="footer-right">
+      <span>© 2026 Verbium v17.6</span>
+      <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">🌙</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="copy-toast"></div>
+
+<!-- Save modal -->
+<div id="save-modal" class="modal hidden">
+  <div class="modal-card">
+    <h2>Guardar poema</h2>
+    <p>Ingresa un nombre para identificar este poema</p>
+    <input type="text" id="poem-name" placeholder="Nombre del poema..." autocomplete="off">
+    <div class="modal-actions">
+      <button onclick="closeModal()">Cancelar</button>
+      <button class="btn-dark" onclick="savePoem()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Rename modal -->
+<div id="rename-modal" class="modal hidden">
+  <div class="modal-card">
+    <h2>Renombrar poema</h2>
+    <p>Ingresa el nuevo nombre</p>
+    <input type="text" id="rename-input" placeholder="Nuevo nombre..." autocomplete="off">
+    <div class="modal-actions">
+      <button onclick="closeRenameModal()">Cancelar</button>
+      <button class="btn-dark" onclick="confirmRename()">Renombrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete confirmation modal -->
+<div id="delete-modal" class="modal hidden">
+  <div class="modal-card">
+    <h2>Eliminar poema</h2>
+    <p id="delete-modal-msg">¿Seguro que quieres eliminar este poema?</p>
+    <div class="modal-actions">
+      <button onclick="closeDeleteModal()">Cancelar</button>
+      <button style="background:#8b3a0f;color:#fff;border-color:#8b3a0f" onclick="confirmDelete()">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+
+
+
+/* ── Constants ──────────────────────────────────────────── */
+const VOWELS        = new Set('aeiouáéíóúüŵẅ');
+const STRONG        = new Set('aeoáéó');
+const WEAK          = new Set('iuüŵẅ');
+const WEAK_ACCENT   = new Set('íú');
+const UNACCENT_MAP  = {á:'a',é:'e',í:'i',ó:'o',ú:'u',ü:'u'};
+const ONSET_CLUSTERS= new Set(['bl','br','cl','cr','dr','fl','fr','gl','gr','pl','pr','tr','ch','ll','rr','qŵ','gŵ','gẅ']);
+const VERSE_NAMES   = {2:'Bisílabo',3:'Trisílabo',4:'Tetrasílabo',5:'Pentasílabo',6:'Hexasílabo',7:'Heptasílabo',8:'Octosílabo',9:'Eneasílabo',10:'Decasílabo',11:'Endecasílabo',12:'Dodecasílabo',14:'Alejandrino'};
+const STRIP_PUNCT   = /[¿¡.,;:!?"«»""''()\[\]\-–—]/g;
+const REGULAR_COUNTS= new Set([8, 11, 14]);
+const STORAGE_KEY   = 'verbium_poems';
+
+const CONTRACTIONS = new Map([
+  ["d'el",["de","el"]],["d'él",["de","él"]],["pa'que",["para","que"]],
+  ["pa'",["para"]],["pal",["para","el"]],["p'al",["para","el"]],
+  ["p'alla",["para","alla"]],["pa'lla",["para","alla"]],
+  ["pa'cá",["para","acá"]],["pa'ca",["para","aca"]]
+]);
+
+const UI_HIATO = new Set([
+  'destruír','construír','incluír','excluír','fluír','huír',
+  'aún','raúl','baúl'
+]);
+
+const COMMON_WORDS = new Set(['mi','si','vi','li','xi','ci','di','la','lo','le','se','me','te','de','el','al','un','en','es','su','tu']);
+const STRESS_ADJ   = {aguda:1,llana:0,esdrujula:-1};
+const STRESS_SIGN  = {aguda:'+', llana:'', esdrujula:'−'};
+const STRESS_COLOR = {aguda:'var(--rust)',llana:'var(--ink50)',esdrujula:'var(--gold)'};
+const LETTERS      = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+/* ── Helpers ────────────────────────────────────────────── */
+const isVowel  = ch => !!ch && VOWELS.has(ch);
+const isWeak   = ch => !!ch && WEAK.has(ch);
+const isStrong = ch => !!ch && STRONG.has(ch);
+const unaccent = ch => UNACCENT_MAP[ch] || ch;
+const stripVC  = s  => s.replace(/[^a-záéíóúüñ]/gi,'');
+const stripVCY = s  => s.replace(/[^a-záéíóúüñy]/gi,'');
+const escHtml  = s  => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+function expandContraction(word) {
+  return CONTRACTIONS.get(word.toLowerCase()) ?? null;
+}
+
+/* ── Syllable cache ─────────────────────────────────────── */
+const MAX_CACHE = 500;
+const sylCache  = new Map();
+function syllabifyCached(word) {
+  if (sylCache.has(word)) return sylCache.get(word);
+  const r = syllabify(word);
+  if (sylCache.size >= MAX_CACHE) sylCache.delete(sylCache.keys().next().value);
+  sylCache.set(word, r);
+  return r;
+}
+
+/* ── Word-type checks ───────────────────────────────────── */
+function isNumber(word) {
+  const c = word.replace(STRIP_PUNCT,'').trim();
+  if (!c) return false;
+  if (/^\d+$/.test(c)) return true;
+  if (/^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/i.test(c) && c.length > 0) {
+    return !COMMON_WORDS.has(c.toLowerCase());
+  }
+  return false;
+}
+const numberToSyls = word => {
+  const c = word.replace(STRIP_PUNCT,'').trim();
+  return [/^[IVXLCDMivxlcdm]+$/.test(c) ? c.toUpperCase() : c];
+};
+const isYFinal     = word => { const c = word.replace(STRIP_PUNCT,'').toLowerCase().trim(); return c.length > 1 && c !== 'muy' && /[aeiou][y]$/i.test(c) && !c.includes('ü'); };
+const treatAsVowelY= word => { const c = word.replace(STRIP_PUNCT,'').toLowerCase().trim(); return c === 'y' || c === 'é' || isYFinal(word); };
+const treatYAsVowel= s    => { const c = s.toLowerCase().trim(); if (c === 'muy') return s; return (s.length >= 2 && /[aeiouáéíóúüŵẅ]y$/i.test(s)) ? s.slice(0,-1)+'i' : s; };
+
+/* ── Diphthong check ────────────────────────────────────── */
+function isDiphthong(v1, v2, wordClean, nextChar) {
+  if (WEAK_ACCENT.has(v1) || WEAK_ACCENT.has(v2)) return false;
+  if (isStrong(v1) && isStrong(v2)) return false;
+  if (nextChar === 'h') return true;
+  if (isWeak(v1) && isWeak(v2)) return wordClean ? !UI_HIATO.has(wordClean) : true;
+  return (isWeak(v1) && isStrong(v2)) || (isStrong(v1) && isWeak(v2));
+}
+
+/* ── Core syllabifier ───────────────────────────────────── */
+function syllabify(word) {
+  let clean = word.replace(STRIP_PUNCT,'').toLowerCase().trim();
+  if (!clean) return [];
+  const expanded = expandContraction(clean);
+  if (expanded)          return expanded;
+  if (isNumber(clean))   return numberToSyls(clean);
+  if (isYFinal(clean))   return [clean];
+  const wordClean = clean.replace(/[ŵẅ]/g,'u').replace(/ü/g,'u');
+  clean = clean.replace(/qu([ei])/g,'qŵ$1').replace(/gu([ei])/g,'gŵ$1').replace(/gü/g,'gẅ');
+  const L = [...clean], N = L.length;
+  let pos = 0;
+  const syls = [];
+  while (pos < N) {
+    let syl = '';
+    while (pos < N && !isVowel(L[pos])) syl += L[pos++];
+    if (pos >= N) { if (syl) (syls.length ? syls[syls.length-1] += syl : syls.push(syl)); break; }
+    syl += L[pos++];
+    let la = pos;
+    while (la < N && L[la] === 'h') la++;
+    if (la < N && isVowel(L[la])) {
+      if (isDiphthong(L[pos-1], L[la], wordClean, L[la-1])) {
+        while (pos < la) syl += L[pos++];
+        syl += L[pos++];
+        if (pos < N && isVowel(L[pos]) && isWeak(L[pos]) && !WEAK_ACCENT.has(L[pos])) syl += L[pos++];
+      }
+    }
+    const cs = pos;
+    while (pos < N && !isVowel(L[pos])) pos++;
+    const cons = L.slice(cs, pos);
+    if (!cons.length)   { syls.push(syl); }
+    else if (pos >= N)  { syls.push(syl + cons.join('')); }
+    else {
+      const sp = cons.length <= 1 ? 0 : (ONSET_CLUSTERS.has(cons.slice(-2).join('')) ? cons.length-2 : cons.length-1);
+      syls.push(syl + cons.slice(0,sp).join(''));
+      pos = cs + sp;
+    }
+  }
+  return (syls.length ? syls : [clean]).map(s => {
+    const isTriphthong = s.includes('ẅ');
+    const restored = s.replace(/ŵ/g,'u').replace(/ẅ/g,'ü');
+    return isTriphthong ? restored : treatYAsVowel(restored);
+  });
+}
+
+/* ── Tonic index ────────────────────────────────────────── */
+function tonicIndex(word) {
+  const clean = word.replace(STRIP_PUNCT,'').toLowerCase().trim();
+  if (!clean || isNumber(clean) || isYFinal(clean)) return 0;
+  const syls = syllabifyCached(clean), n = syls.length;
+  if (!n) return 0;
+  for (let i = 0; i < n; i++) if (/[áéíóú]/.test(syls[i])) return i;
+  if (n === 1) return 0;
+  return /[aeioun s]/.test(clean[clean.length-1]) ? n-2 : n-1;
+}
+function buildTonicMap(wordSyllables) {
+  const map = [];
+  for (const {word,syllables} of wordSyllables) {
+    const ti = tonicIndex(word);
+    syllables.forEach((_,i) => map.push(i === ti));
+  }
+  return map;
+}
+
+/* ── Char helpers ───────────────────────────────────────── */
+function effectiveLastChar(syl) {
+  let ch = stripVCY(syl).slice(-1).toLowerCase();
+  const sylClean = syl.replace(STRIP_PUNCT,'').toLowerCase().trim();
+  if (ch==='y' && sylClean !== 'muy' && syl.length>1 && /[aeiouáéíóú]/.test(syl[syl.length-2])) ch='i';
+  return ch;
+}
+function effectiveFirstChar(syl, word) {
+  if (treatAsVowelY(word)) return 'i';
+  return syl.replace(/^h/i,'').replace(/[^a-záéíóúüñy]/gi,'').slice(0,1).toLowerCase();
+}
+
+/* ── Token builder ──────────────────────────────────────── */
+function makeToken(w) {
+  const c = w.replace(STRIP_PUNCT,'').toLowerCase();
+  const exp = expandContraction(c);
+  if (exp) return exp;
+  if (c === 'y' || c === 'é') return ['i'];
+  if (isNumber(c)) return numberToSyls(c);
+  return syllabifyCached(w);
+}
+function tokenize(line) {
+  const tokens = [];
+  for (const w of line.trim().split(/\s+/).filter(Boolean)) {
+    const hm = w.match(/^([A-Za-záéíóúüñÁÉÍÓÚÜÑ]+)-([\S]+)$/i);
+    if (hm) {
+      const [, left, right] = hm;
+      if (VOWELS.has(left.toLowerCase().slice(-1))) {
+        tokens.push({word:left,  syllables:makeToken(left),  blockSinalefa:true,  sineresis:[],dieresis:[],isNumber:isNumber(left),  isContraction:false});
+        tokens.push({word:right, syllables:makeToken(right), blockSinalefa:false, sineresis:[],dieresis:[],isNumber:isNumber(right), isContraction:false});
+        continue;
+      }
+    }
+    tokens.push({word:w, syllables:makeToken(w), blockSinalefa:false, sineresis:[],dieresis:[],isNumber:isNumber(w), isContraction:expandContraction(w.toLowerCase())!==null});
+  }
+  return tokens;
+}
+
+/* ── Phonological adjustments ───────────────────────────── */
+function applySineresis(syls) {
+  if (syls.length <= 1) return {syls, marks:[]};
+  const result=[], marks=[];
+  let i=0;
+  while (i < syls.length) {
+    const cur=syls[i], nxt=syls[i+1];
+    if (nxt !== undefined) {
+      const ce = stripVC(cur).slice(-1).toLowerCase();
+      const ns = stripVC(nxt).slice(0,1).toLowerCase();
+      if (isVowel(ce) && isVowel(ns) && !isDiphthong(ce,ns,null,null)
+        && !WEAK_ACCENT.has(ce) && !WEAK_ACCENT.has(ns)
+        && !/[áéíóú]/.test(cur) && !/[áéíóú]/.test(nxt)) {
+        result.push(cur+nxt); marks.push(result.length-1); i+=2; continue;
+      }
+    }
+    result.push(cur); i++;
+  }
+  return {syls:result, marks};
+}
+function applyDieresis(syls) {
+  const result=[], marks=[];
+  for (const syl of syls) {
+    const chars=[...syl];
+    let split=-1;
+    for (let c=0; c<chars.length-1; c++) {
+      const v1=chars[c].toLowerCase(), v2=chars[c+1].toLowerCase();
+      const isGU = v1==='ü' && c>0 && chars[c-1].toLowerCase()==='g';
+      if (isVowel(v1) && isVowel(v2) && isDiphthong(v1,v2,null,null)
+        && (WEAK_ACCENT.has(v1)||WEAK_ACCENT.has(v2)||v1==='ü'||v2==='ü')
+        && !isGU) {
+        split=c+1; break;
+      }
+    }
+    if (split > 0) { marks.push(result.length); result.push(chars.slice(0,split).join('')); result.push(chars.slice(split).join('')); }
+    else result.push(syl);
+  }
+  return {syls:result, marks};
+}
+function applySinalefa(wordSyllables) {
+  const result=[], n=wordSyllables.length;
+  for (let w=0; w<n; w++) {
+    const {word,syllables,blockSinalefa,isNumber:isNum,isContraction}=wordSyllables[w];
+    const m=syllables.length;
+    for (let s=0; s<m; s++) {
+      const isLast=s===m-1, isLastWord=w===n-1;
+      let sinalefa=false, hiato=false, divisionHyphen=false, hiatoMetrico=false;
+      if (isLast && !isLastWord) {
+        const next=wordSyllables[w+1];
+        if (blockSinalefa||isNum||isContraction) {
+          divisionHyphen=true;
+        } else if (treatAsVowelY(word)) {
+          const fc=next.syllables[0].replace(/^h/i,'').replace(/[^a-záéíóúüñ]/gi,'').slice(0,1).toLowerCase();
+          if (isVowel(fc)) sinalefa=true;
+        } else {
+          const lc=effectiveLastChar(syllables[s]);
+          if (isVowel(lc) && next?.syllables.length && !next.isNumber) {
+            const fc=treatAsVowelY(next.word)?'i':effectiveFirstChar(next.syllables[0],next.word);
+            if (isVowel(fc)) sinalefa=true;
+          }
+        }
+      }
+      if (!isLast) {
+        const te=stripVC(syllables[s]).slice(-1).toLowerCase();
+        const ns=stripVC(syllables[s+1]).slice(0,1).toLowerCase();
+        if (isVowel(te) && isVowel(ns) && !isDiphthong(te,ns,null,null)) hiato=true;
+      }
+      result.push({text:syllables[s],sinalefa,hiato,hiatoMetrico,divisionHyphen,wordBreak:isLast&&!isLastWord,isNumber:isNum,isContraction});
+    }
+  }
+  return result;
+}
+function detectCesura(sylData) {
+  let count=0, skip=false;
+  for (let i=0; i<sylData.length; i++) {
+    if (skip) { skip=false; continue; }
+    count++;
+    if (count===7 && sylData[i].wordBreak) return i;
+    if (sylData[i].sinalefa) skip=true;
+  }
+  return -1;
+}
+function countPoetic(sylData) {
+  let count=0, skip=false;
+  for (const s of sylData) { if(skip){skip=false;continue;} count++; if(s.sinalefa)skip=true; }
+  return count;
+}
+function lastWordStress(word) {
+  const clean=word.replace(STRIP_PUNCT,'').toLowerCase().trim();
+  if (!clean || isNumber(clean)) return 'llana';
+  if (isYFinal(clean)) return 'aguda';
+  const syls=syllabifyCached(clean), n=syls.length;
+  if (n<=1) return 'aguda';
+  for (let i=0; i<n; i++) {
+    if (/[áéíóú]/.test(syls[i])) {
+      if (i===n-1) return 'aguda';
+      if (i===n-2) return 'llana';
+      return 'esdrujula';
+    }
+  }
+  return /[aeioun s]/.test(clean.slice(-1)) ? 'llana' : 'aguda';
+}
+
+/* ── Line analysis ──────────────────────────────────────── */
+function analyzeLine(line) {
+  const raw = tokenize(line);
+  if (!raw.length) return null;
+  const ws = raw.map(tok => {
+    const {syls:s1,marks:sm} = applySineresis(tok.syllables);
+    const {syls:s2,marks:dm} = applyDieresis(s1);
+    return {...tok, syllables:s2, sineresis:sm, dieresis:dm};
+  });
+  let sylData = applySinalefa(ws);
+  const stress  = lastWordStress(ws[ws.length-1].word);
+  const adj     = STRESS_ADJ[stress];
+  let cesuraIdx = -1;
+  if (countPoetic(sylData)+adj === 14) {
+    cesuraIdx = detectCesura(sylData);
+    if (cesuraIdx >= 0 && sylData[cesuraIdx].sinalefa)
+      sylData[cesuraIdx] = {...sylData[cesuraIdx], sinalefa:false, hiatoMetrico:true};
+  }
+  const baseCount = countPoetic(sylData);
+  const tonicMap  = buildTonicMap(ws);
+  return {
+    words:ws.map(t=>t.word), wordSyllables:ws, sylData, tonicMap,
+    baseCount, stress, adjustment:adj, count:baseCount+adj, cesuraIdx
+  };
+}
+
+/* ── Rhyme ──────────────────────────────────────────────── */
+function getRhymeSounds(word) {
+  const clean=word.replace(STRIP_PUNCT,'').toLowerCase().trim();
+  if (!clean) return {consonant:'',assonant:''};
+  if (isNumber(clean)) return {consonant:clean,assonant:clean};
+  if (isYFinal(clean)) { const w=clean.slice(0,-1)+'i'; return {consonant:w,assonant:w}; }
+  const syls=syllabifyCached(clean), n=syls.length;
+  let idx=syls.findIndex(s=>/[áéíóú]/.test(s));
+  if (idx===-1) idx=Math.max(0,/[aeioun s]/.test(clean.slice(-1))?n-2:n-1);
+  const part=syls.slice(idx).join('');
+  return {
+    consonant:[...part].map(unaccent).join(''),
+    assonant: [...part].filter(ch=>VOWELS.has(ch)).map(unaccent).join('')
+  };
+}
+function assignRhymes(results) {
+  const consMap={}, assoMap={};
+  let counter=0;
+  for (const r of results.filter(Boolean)) {
+    const {consonant,assonant}=getRhymeSounds(r.words[r.words.length-1]);
+    if (!consonant) { r.rhymeLabel='—'; continue; }
+    if      (consMap[consonant]!==undefined) r.rhymeLabel=consMap[consonant];
+    else if (assoMap[assonant] !==undefined) { const l=assoMap[assonant]; consMap[consonant]=l; r.rhymeLabel=l; }
+    else { const l=LETTERS[counter++%26]; consMap[consonant]=assoMap[assonant]=l; r.rhymeLabel=l; }
+  }
+}
+
+/* ── Render ─────────────────────────────────────────────── */
+function renderDivided(sylData, cesuraIdx, tonicMap, sinMarks=[], dieMarks=[]) {
+  const parts=[];
+  let i=0;
+  while (i < sylData.length) {
+    const cur=sylData[i];
+    if (cur.sinalefa && i+1<sylData.length) {
+      parts.push({text:cur.text+'‿'+sylData[i+1].text, merged:true, cesuraBefore:i===cesuraIdx, tonic:tonicMap[i]||tonicMap[i+1], wordBreak:cur.wordBreak});
+      i+=2;
+    } else {
+      parts.push({
+        text:cur.text, merged:false,
+        hiato:!!cur.hiato, hiatoMetrico:!!cur.hiatoMetrico, divisionHyphen:!!cur.divisionHyphen,
+        cesuraBefore:i===cesuraIdx, tonic:!!tonicMap[i],
+        sineresis:sinMarks.includes(i), dieresis:dieMarks.includes(i),
+        isNumber:cur.isNumber||false, isContraction:cur.isContraction||false,
+        wordBreak:!!cur.wordBreak
+      });
+      i++;
+    }
+  }
+  const SEP_CESURA = '<span class="cesura-mark" title="Cesura">‖</span>';
+  const SEP_DIV    = '<span style="color:var(--purple);font-weight:600;margin:0 2px;font-size:.8em" title="División">|</span>';
+  const SEP_DOT    = '<span style="color:var(--ink30);margin:0 1px">.</span>';
+  const SEP_WORD   = '<span style="color:var(--ink30);margin:0 3px">/</span>';
+  const SEP_NONE   = '';
+  const sylRow = parts.map((p,idx) => {
+    const prev = idx > 0 ? parts[idx-1] : null;
+    const sep = idx===0 ? SEP_NONE
+              : prev.cesuraBefore ? SEP_CESURA
+              : prev.divisionHyphen ? SEP_DIV
+              : prev.wordBreak && !prev.merged ? SEP_WORD
+              : SEP_DOT;
+    if (p.merged) return `${sep}<span class="syl ${idx%2?'syl-b':'syl-a'}" style="color:var(--gold)" title="Sinalefa">${p.text}</span>`;
+    const cls   = idx%2 ? 'syl-b' : 'syl-a';
+    const marks = (p.hiato        ? '<span class="hiato-mark"      title="Hiato">H</span>':'')
+                + (p.hiatoMetrico ? '<span class="hiato-met-mark"   title="Hiato métrico">↗</span>':'')
+                + (p.sineresis    ? '<span class="sineresis-mark"   title="Sinéresis">S</span>':'')
+                + (p.dieresis     ? '<span class="dieresis-mark"    title="Diéresis">D</span>':'')
+                + (p.isNumber     ? '<span class="number-mark"      title="Número">#</span>':'')
+                + (p.isContraction? '<span class="contraction-mark" title="Contracción">⌣</span>':'');
+    const wordSep = p.wordBreak && !p.merged ? SEP_WORD : '';
+    return `${sep}<span class="syl ${cls}">${p.text}</span>${marks}`;
+  }).join('');
+  return `<div class="syl-line">${sylRow}</div>`;
+}
+
+
+/* ── State ──────────────────────────────────────────────── */
+let currentResults = null;
+const $ = id => document.getElementById(id);
+
+/* ── Main analyze ───────────────────────────────────────── */
+function analyzePoem() {
+  const raw = $('poem-input').value;
+  if (!raw.trim()) { $('results').style.display='none'; return; }
+  const text = cleanPoemText(raw);
+
+  const results = text.split('\n').map(line => {
+    if (!line.trim()) return null;
+    const r = analyzeLine(line);
+    if (!r) return null;
+    const sinAll=[], dieAll=[];
+    let offset=0;
+    for (const word of r.wordSyllables) {
+      word.sineresis.forEach(pos => sinAll.push(offset+pos));
+      word.dieresis.forEach( pos => dieAll.push(offset+pos));
+      offset += word.syllables.length;
+    }
+    return {...r, line, sineresisMarks:sinAll, dieresisMarks:dieAll};
+  });
+
+  const valid = results.filter(Boolean);
+  if (!valid.length) { $('results').style.display='none'; return; }
+
+  assignRhymes(results);
+  currentResults = results;
+
+  /* Stats */
+  const counts   = valid.map(r => r.count);
+  const total    = valid.length;
+  const totalSyl = counts.reduce((a,b)=>a+b,0);
+  const avg      = (totalSyl/total).toFixed(1);
+  const minC     = Math.min(...counts), maxC=Math.max(...counts);
+  const dominant = [...new Set(counts)].sort((a,b)=>counts.filter(x=>x===b).length-counts.filter(x=>x===a).length)[0];
+  const isIso    = new Set(counts).size === 1;
+  const metroName= VERSE_NAMES[dominant] || dominant+' síl.';
+  const patron   = isIso ? 'Regular' : 'Irregular';
+  const tendencia= VERSE_NAMES[dominant] ? VERSE_NAMES[dominant].replace('ílabo','').replace('ísílabo','') : dominant+' síl.';
+  const rhymePattern = valid.map(r => r.rhymeLabel||'—').join('');
+
+  $('metrics-grid').innerHTML=`
+    <div class="metric-card"><div class="metric-value">${totalSyl}</div><div class="metric-label">Total síl.</div></div>
+    <div class="metric-card"><div class="metric-value">${avg}</div><div class="metric-label">Promedio</div></div>
+    <div class="metric-card"><div class="metric-value">${minC}</div><div class="metric-label">Mínimo</div></div>
+    <div class="metric-card"><div class="metric-value">${maxC}</div><div class="metric-label">Máximo</div></div>
+    <div class="metric-card"><div class="metric-value">${patron}</div><div class="metric-label">Patrón</div></div>
+    <div class="metric-card"><div class="metric-value">${tendencia}</div><div class="metric-label">Tendencia</div></div>
+    <div class="metric-card"><div class="metric-value">${rhymePattern}</div><div class="metric-label">Rima</div></div>`;
+
+  /* Chart */
+  const maxBar = Math.max(...counts, 1);
+  const barHeight = 180;
+  function detectRitmoBar(tonicMap, count) {
+    const t = Object.keys(tonicMap).map(Number).filter(i=>tonicMap[i]).map(i=>i+1).sort((a,b)=>a-b);
+    if (!t.length) return 'Irregular';
+    if (count>=10&&count<=12) {
+      if (t.includes(1)&&t.includes(6)) return 'Enfático';
+      if (t.includes(2)&&t.includes(6)) return 'Heroico';
+      if (t.includes(3)&&t.includes(6)) return 'Melódico';
+      if (t.includes(4)&&t.includes(8)) return 'Sáfico';
+    }
+    const evens=t.filter(x=>x%2===0), odds=t.filter(x=>x%2!==0);
+    if (evens.length>=2&&evens.length>odds.length) return 'Yámbico';
+    if (odds.length>=2&&odds.length>evens.length) return 'Trocaico';
+    if (t.filter(x=>(x-1)%3===0).length>=2) return 'Dactílico';
+    return 'Irregular';
+  }
+  $('bars-container').innerHTML = valid.map((r,i) => {
+    const h = Math.round(r.count/maxBar*barHeight);
+    const isRegular = r.count === 8 || r.count === 11;
+    const barColor = isRegular ? '#15803d' : '#b8922a';
+    const ritmo = detectRitmoBar(r.tonicMap, r.count);
+    const RITMO_COLORS = {'Heroico':'#8b3a0f','Melódico':'#15803d','Sáfico':'#1d4ed8','Enfático':'#0369a1','Yámbico':'#b8922a','Trocaico':'#7e22ce','Dactílico':'#be123c','Irregular':'rgba(28,26,22,.4)'};
+    const ritmoColor = RITMO_COLORS[ritmo] || 'rgba(28,26,22,.4)';
+    return `<div class="bar-item">
+      <div class="bar-top-num" style="color:${barColor}">${r.count}</div>
+      <div class="bar-area"><div class="bar-fill" style="height:${h}px;background:${barColor}" title="Verso ${i+1}: ${r.count} sílabas — ${ritmo}"></div></div>
+      <div class="bar-lbl" style="color:${ritmoColor};font-weight:600">${ritmo}</div>
+    </div>`;
+  }).join('');
+
+  /* Table */
+  const tbody = $('results-body');
+  tbody.innerHTML = '';
+  let rowNum = 0;
+  for (const r of results) {
+    const tr = document.createElement('tr');
+    if (!r) {
+      tr.style.cssText='background:var(--border)';
+      tr.innerHTML=`<td colspan="5" style="padding:.2rem;border-bottom:1px solid var(--border)"></td>`;
+      tbody.appendChild(tr); continue;
+    }
+    rowNum++;
+    tr.className = REGULAR_COUNTS.has(r.count) ? 'verse-regular' : 'verse-irregular';
+    const sign = STRESS_SIGN[r.stress]
+      ? `<span style="font-size:.58rem;font-weight:700;vertical-align:super;color:${STRESS_COLOR[r.stress]}">${STRESS_SIGN[r.stress]}</span>`
+      : '';
+    tr.innerHTML=`
+      <td class="td-num"      data-label="#">${rowNum}</td>
+      <td class="td-original" data-label="Verso">${escHtml(r.line)}</td>
+      <td class="td-divided"  data-label="División">${renderDivided(r.sylData,r.cesuraIdx,r.tonicMap,r.sineresisMarks,r.dieresisMarks)}</td>
+      <td class="td-count"    data-label="Sílabas"><span class="count-num">${r.count}</span>${sign}</td>
+      <td class="td-type"     data-label="Rima"><span style="font-size:1rem;font-weight:600;color:var(--rust)">${r.rhymeLabel||'—'}</span></td>`;
+    tbody.appendChild(tr);
+  }
+
+  $('results').style.display='flex';
+}
+
+
+
+
+/* ── Theme ──────────────────────────────────────────────── */
+function updateThemeBtn(theme) {
+  const btn = document.getElementById('theme-btn');
+  if (!btn) return;
+  btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+}
+function toggleTheme() {
+  const next = document.body.getAttribute('data-theme')==='light' ? 'dark' : 'light';
+  document.body.setAttribute('data-theme', next);
+  localStorage.setItem('verbium_theme', next);
+  updateThemeBtn(next);
+}
+function loadTheme() {
+  const saved = localStorage.getItem('verbium_theme');
+  const theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.body.setAttribute('data-theme', theme);
+  updateThemeBtn(theme);
+}
+
+/* ── Storage ────────────────────────────────────────────── */
+const getSavedPoems = () => { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); } catch { return []; } };
+function savePoemToStorage(name, text) {
+  const poems = getSavedPoems();
+  poems.unshift({id:Date.now(), name:name.trim(), text, date:new Date().toISOString()});
+  if (poems.length > 20) poems.pop();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(poems));
+  updateSavedPanel();
+}
+function deletePoemFromStorage(id) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(getSavedPoems().filter(p=>p.id!==id)));
+  updateSavedPanel();
+}
+function clearAllPoems() {
+  if (!getSavedPoems().length) { showToast('No hay poemas guardados'); return; }
+  localStorage.removeItem(STORAGE_KEY);
+  updateSavedPanel();
+  showToast('Poemas eliminados');
+}
+function updateSavedPanel() {
+  const poems = getSavedPoems();
+  renderFileBrowser(poems);
+}
+
+let selectedFileId = null;
+
+function renderFileBrowser(poems) {
+  const grid = $('files-grid');
+  const empty = null;
+  const actions = $('saved-actions');
+  const counter = $('file-count-label');
+  if (counter) counter.textContent = poems.length + (poems.length===1?' poema':' poemas');
+  
+  if (!poems.length) {
+    grid.innerHTML = '<div class="saved-empty">No hay poemas guardados aún</div>';
+    actions.style.display = 'none';
+    selectedFileId = null;
+    return;
+  }
+  const linePatterns = [
+    ['gold','','','gold','','short'],
+    ['','gold','','short','gold',''],
+    ['gold','','short','','gold','short'],
+    ['','','gold','','short','gold'],
+  ];
+  grid.innerHTML = poems.map((p, i) => {
+    const pat = linePatterns[i % linePatterns.length];
+    const lines = pat.map(c => `<div class="file-line${c==='gold'?' gold':''}" ${c==='short'?'style="width:60%"':''}></div>`).join('');
+    const d = new Date(p.date);
+    const now = new Date();
+    const isToday = d.toDateString()===now.toDateString();
+    const isYesterday = new Date(now-86400000).toDateString()===d.toDateString();
+    const dateStr = isToday ? 'Hoy, '+d.getHours()+':'+String(d.getMinutes()).padStart(2,'0')
+                  : isYesterday ? 'Ayer'
+                  : d.getDate()+' '+['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][d.getMonth()];
+    const sel = p.id===selectedFileId ? ' selected' : '';
+    return `<div class="saved-card${sel?' selected':''}" onclick="selectFile(${p.id})" ondblclick="loadSelectedFile()">
+      <div class="file-icon-wrap">
+        <div class="file-body">
+          <div class="file-fold-cover"></div>
+          <div class="file-fold"></div>
+          <div class="file-lines">${lines}</div>
+        </div>
+      </div>
+      <div class="saved-info"><span class="saved-name">${escHtml(p.name.length>22?p.name.substring(0,22)+'…':p.name)}</span></div>
+      <div class="file-date">${dateStr}</div>
+    </div>`;
+  }).join('');
+  actions.style.display = selectedFileId ? 'flex' : 'none';
+}
+
+function selectFile(id) {
+  selectedFileId = selectedFileId===id ? null : id;
+  renderFileBrowser(getSavedPoems());
+}
+function loadSelectedFile() {
+  if (selectedFileId) { loadPoem(selectedFileId); selectedFileId=null; }
+}
+function renameSelectedFile() {
+  if (!selectedFileId) return;
+  const poem = getSavedPoems().find(p=>p.id===selectedFileId);
+  if (!poem) return;
+  $('rename-input').value = poem.name;
+  $('rename-modal').classList.remove('hidden');
+  $('rename-input').focus();
+  $('rename-input').select();
+}
+function closeRenameModal() { $('rename-modal').classList.add('hidden'); }
+function confirmRename() {
+  const newName = $('rename-input').value.trim();
+  if (!newName) return;
+  const poems = getSavedPoems().map(p=>p.id===selectedFileId?{...p,name:newName}:p);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(poems));
+  closeRenameModal();
+  updateSavedPanel();
+  showToast('Renombrado: '+newName);
+}
+function deleteSelectedFile() {
+  if (!selectedFileId) return;
+  const poem = getSavedPoems().find(p=>p.id===selectedFileId);
+  if (!poem) return;
+  $('delete-modal-msg').textContent = '¿Seguro que quieres eliminar "' + poem.name + '"?';
+  $('delete-modal').classList.remove('hidden');
+}
+function closeDeleteModal() { $('delete-modal').classList.add('hidden'); }
+function confirmDelete() {
+  closeDeleteModal();
+  deletePoemFromStorage(selectedFileId);
+  selectedFileId = null;
+  showToast('Eliminado');
+}
+function loadPoem(id) {
+  const poem = getSavedPoems().find(p=>p.id===id);
+  if (!poem) return;
+  $('poem-input').value = poem.text;
+  $('verse-count').textContent = poem.text.split('\n').filter(l=>l.trim()).length;
+  $('results').style.display='none';
+  currentResults = null;
+  showToast(`Cargado: ${poem.name}`);
+}
+
+/* ── Modal ──────────────────────────────────────────────── */
+function showSaveModal() {
+  if (!$('poem-input').value.trim()) { showToast('No hay poema para guardar'); return; }
+  $('poem-name').value='';
+  $('save-modal').classList.remove('hidden');
+  $('poem-name').focus();
+}
+function closeModal() { $('save-modal').classList.add('hidden'); }
+function savePoem() {
+  const name=$('poem-name').value.trim(), text=$('poem-input').value.trim();
+  if (!name) { showToast('Ingresa un nombre'); return; }
+  if (!text) { showToast('No hay poema para guardar'); return; }
+  savePoemToStorage(name, text);
+  closeModal();
+  showToast(`"${name}" guardado`);
+}
+
+
+/* ── Toast ──────────────────────────────────────────────── */
+let toastTimer;
+function showToast(msg) {
+  const t=$('copy-toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>{ t.classList.remove('show'); t.textContent='✓ Copiado al portapapeles'; }, 2200);
+}
+
+/* ── Clipboard ──────────────────────────────────────────── */
+
+function cleanPoemText(text) {
+  return text.split('\n').map(line => {
+    return line
+      .replace(/^\s*#+\s*/,'')                            // ### markdown headings
+      .replace(/\b\d+\s*[\+\*=]\s*\d+\s*[=\+\*]?\s*\d*\b/g,'')           // math: 7+1=8 3*4=12
+      .replace(/^\s*\d+(?=[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ])/,'')  // number glued to word at start
+      .replace(/\(\s*\d+\s*\)/g,'')                       // (1) inline
+      .replace(/\[\s*\d+\s*\]/g,'')                       // [1] inline
+      .replace(/[()[\]]/g,'')                              // remaining parens/brackets
+      .replace(/\|/g,'')                                  // pipe characters
+      .replace(/-/g,'')                                    // dashes (preserve spaces)
+      .replace(/^\s*[-–—]\s*/,'')                         // leading dash after number removal
+      .replace(/\s+\d+\s*$/,'')                           // trailing number at end of line
+      .replace(/\s{2,}/g,' ')
+      .trim();
+  })
+  .filter(line => line.length > 0)
+  .join('\n')
+  .trim();
+}
+
+
+/* ── Copy poem ──────────────────────────────────────────── */
+function copyPoem() {
+  const text = $('poem-input').value.trim();
+  if (!text) { showToast('No hay texto para copiar'); return; }
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('✓ Copiado al portapapeles');
+  }).catch(() => {
+    // Fallback
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('✓ Copiado al portapapeles');
+  });
+}
+
+/* ── Clear ──────────────────────────────────────────────── */
+function clearPoem() {
+  $('poem-input').value='';
+  $('results').style.display='none';
+  currentResults=null;
+}
+
+/* ── Init ───────────────────────────────────────────────── */
+const poemInput=$('poem-input');
+let _debounceTimer = null;
+
+function debounceAnalyze() {
+  $('verse-count').textContent = poemInput.value.split('\n').filter(l=>l.trim()).length;
+  clearTimeout(_debounceTimer);
+  if (!poemInput.value.trim()) { $('results').style.display='none'; return; }
+  _debounceTimer = setTimeout(analyzePoem, 800);
+}
+
+poemInput.addEventListener('input', debounceAnalyze);
+poemInput.addEventListener('keydown', e => { if(e.key==='Enter'&&e.ctrlKey) analyzePoem(); });
+poemInput.addEventListener('paste', e => {
+  e.preventDefault();
+  const pasted = (e.clipboardData||window.clipboardData).getData('text');
+  const cleaned = cleanPoemText(pasted);
+  const sel = poemInput.selectionStart;
+  const end = poemInput.selectionEnd;
+  const before = poemInput.value.slice(0, sel);
+  const after  = poemInput.value.slice(end);
+  const newVal = before + cleaned + after;
+  const newPos = sel + cleaned.length;
+  // Use execCommand for undo-stack compatibility, fallback to direct set
+  poemInput.focus();
+  if (!document.execCommand('insertText', false, cleaned)) {
+    poemInput.value = newVal;
+    poemInput.selectionStart = poemInput.selectionEnd = newPos;
+  }
+  debounceAnalyze();
+});
+$('save-modal').addEventListener('click', e => { if(e.target===$('save-modal')) closeModal(); });
+$('poem-name').addEventListener('keydown', e => { if(e.key==='Enter') savePoem(); });
+$('rename-input').addEventListener('keydown', e => { if(e.key==='Enter') confirmRename(); if(e.key==='Escape') closeRenameModal(); });
+window.onload = () => { loadTheme(); $('poem-input').value=''; $('verse-count').textContent=0; updateSavedPanel(); };
+
+
+</script>
+</body>
+</html>
