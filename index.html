@@ -74,7 +74,7 @@
 
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-.app{width:min(96%,1200px);margin:20px auto;display:flex;flex-direction:column;gap:8px}
+.app{width:min(96%,980px);margin:20px auto;display:flex;flex-direction:column;gap:8px}
 
 /* Header */
 .header{background:var(--bg2);border:1px solid var(--border);border-top:3px solid var(--gold);padding:0;overflow:visible}
@@ -269,9 +269,12 @@ tbody tr:hover{background:var(--rust-lt)}
 
   <!-- File browser -->
   <div class="box" style="padding:0">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 24px">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 24px;gap:12px;flex-wrap:wrap">
       <h2 style="margin:0">Poemas Guardados</h2>
-      <span id="file-count-label" style="font-size:12px;color:var(--ink50);letter-spacing:.04em"></span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <button id="btn-choose-folder" onclick="chooseFolder()" style="font-size:11px;padding:6px 12px">📁 Elegir carpeta</button>
+        <span id="file-count-label" style="font-size:12px;color:var(--ink50);letter-spacing:.04em"></span>
+      </div>
     </div>
     <div style="padding:16px 24px">
       <div class="saved-grid" id="files-grid"><div class="saved-empty">No hay poemas guardados aún</div></div>
@@ -285,7 +288,7 @@ tbody tr:hover{background:var(--rust-lt)}
 
   <!-- Footer -->
   <div class="footer">
-    <span>© 2026 Verbium v19.3. Todos los derechos reservados.</span>
+    <span>© 2026 Verbium v19.4. Todos los derechos reservados.</span>
     <div class="footer-right">
       <span style="font-family:'Georgia',serif;line-height:1.3;text-align:center;display:inline-block">
         <span style="display:block;font-size:13px;letter-spacing:2px;font-weight:500">ACADÉMICA</span>
@@ -353,6 +356,63 @@ const VERSE_NAMES   = {2:'Bisílabo',3:'Trisílabo',4:'Tetrasílabo',5:'Pentasí
 const STRIP_PUNCT   = /[¿¡.,;:!?"«»""''()\[\]\-–—]/g;
 const REGULAR_COUNTS= new Set([8, 11, 14]);
 const STORAGE_KEY   = 'verbium_poems';
+
+/* ── File System Access (carpeta local) ──────────────────── */
+let dirHandle = null;
+const supportsFS = 'showDirectoryPicker' in window;
+
+async function chooseFolder() {
+  if (!supportsFS) { showToast('Tu navegador no soporta esta función'); return; }
+  try {
+    dirHandle = await window.showDirectoryPicker({ id: 'verbium-poems', mode: 'readwrite' });
+    localStorage.setItem('verbium_folder_chosen', '1');
+    showToast('Carpeta seleccionada: ' + dirHandle.name);
+    updateFolderUI();
+    await syncFolderPoems();
+  } catch (e) { /* user cancelled */ }
+}
+
+async function restoreFolderHandle() {
+  // Browsers don't persist handles across reloads without IndexedDB.
+  // We simply prompt again on first save if a folder was chosen before.
+  updateFolderUI();
+}
+
+function updateFolderUI() {
+  const btn = document.getElementById('btn-choose-folder');
+  if (!btn) return;
+  if (!supportsFS) { btn.style.display = 'none'; return; }
+  btn.textContent = dirHandle ? '📁 ' + dirHandle.name : '📁 Elegir carpeta';
+  btn.title = dirHandle ? 'Guardando en: ' + dirHandle.name : 'Elige una carpeta de tu PC para guardar tus poemas como archivos';
+}
+
+async function saveToFolder(name, text) {
+  if (!dirHandle) return false;
+  try {
+    const fileHandle = await dirHandle.getFileHandle(name.replace(/[\\/:*?"<>|]/g,'-') + '.txt', { create: true });
+    const writable = await fileHandle.createWritable();
+    await writable.write(text);
+    await writable.close();
+    return true;
+  } catch (e) { showToast('No se pudo guardar en la carpeta'); return false; }
+}
+
+async function syncFolderPoems() {
+  if (!dirHandle) return;
+  try {
+    const poems = [];
+    for await (const [filename, handle] of dirHandle.entries()) {
+      if (handle.kind === 'file' && filename.endsWith('.txt')) {
+        const file = await handle.getFile();
+        const text = await file.text();
+        poems.push({ id: filename, name: filename.replace(/\.txt$/,''), text, date: new Date(file.lastModified).toISOString(), fromFolder: true });
+      }
+    }
+    poems.sort((a,b) => new Date(b.date) - new Date(a.date));
+    window._folderPoems = poems;
+    updateSavedPanel();
+  } catch (e) {}
+}
 
 const CONTRACTIONS = new Map([
   ["d'el",["de","el"]],["d'él",["de","él"]],["pa'que",["para","que"]],
@@ -884,8 +944,16 @@ function loadTheme() {
 }
 
 /* ── Storage ────────────────────────────────────────────── */
-const getSavedPoems = () => { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); } catch { return []; } };
-function savePoemToStorage(name, text) {
+const getSavedPoems = () => {
+  const local = (() => { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); } catch { return []; } })();
+  if (dirHandle && window._folderPoems) return window._folderPoems;
+  return local;
+};
+async function savePoemToStorage(name, text) {
+  if (dirHandle) {
+    const ok = await saveToFolder(name, text);
+    if (ok) { await syncFolderPoems(); return; }
+  }
   const poems = getSavedPoems();
   poems.unshift({id:Date.now(), name:name.trim(), text, date:new Date().toISOString()});
   if (poems.length > 20) poems.pop();
@@ -1012,11 +1080,11 @@ function showSaveModal() {
   $('poem-name').focus();
 }
 function closeModal() { $('save-modal').classList.add('hidden'); }
-function savePoem() {
+async function savePoem() {
   const name=$('poem-name').value.trim(), text=$('poem-input').value.trim();
   if (!name) { showToast('Ingresa un nombre'); return; }
   if (!text) { showToast('No hay poema para guardar'); return; }
-  savePoemToStorage(name, text);
+  await savePoemToStorage(name, text);
   closeModal();
   showToast(`"${name}" guardado`);
 }
@@ -1115,7 +1183,7 @@ poemInput.addEventListener('paste', e => {
 $('save-modal').addEventListener('click', e => { if(e.target===$('save-modal')) closeModal(); });
 $('poem-name').addEventListener('keydown', e => { if(e.key==='Enter') savePoem(); });
 $('rename-input').addEventListener('keydown', e => { if(e.key==='Enter') confirmRename(); if(e.key==='Escape') closeRenameModal(); });
-window.onload = () => { loadTheme(); $('poem-input').value=''; $('verse-count').textContent=0; updateSavedPanel(); };
+window.onload = () => { loadTheme(); $('poem-input').value=''; $('verse-count').textContent=0; updateFolderUI(); updateSavedPanel(); };
 
 
 </script>
