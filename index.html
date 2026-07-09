@@ -301,7 +301,7 @@ tbody tr:hover{background:var(--rust-lt)}
         <!-- Empty state -->
         <div class="editor-empty" id="editor-empty">
           <svg width="48" height="48" viewBox="0 0 16 16" fill="currentColor"><path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 8.75 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"/></svg>
-          <p>Abre un poema del panel izquierdo<br>o crea uno nuevo con <strong>＋</strong></p>
+          <p>Crea/Abre un poema del panel izquierdo</p>
         </div>
       </div>
 
@@ -325,8 +325,8 @@ tbody tr:hover{background:var(--rust-lt)}
 <!-- Toast -->
 <div class="toast" id="copy-toast"></div>
 
-<!-- Folder picker modal (shown on first load) -->
-<div id="folder-modal" class="modal" style="z-index:1100;background:rgba(0,0,0,0.45);backdrop-filter:blur(4px)">
+<!-- Folder picker modal (shown on load by requireFolder) -->
+<div id="folder-modal" class="modal hidden" style="z-index:1100;background:rgba(0,0,0,0.45);backdrop-filter:blur(4px)">
   <div class="modal-card" style="max-width:300px;text-align:center;background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.6);box-shadow:0 8px 32px rgba(0,0,0,0.18)">
     <div style="font-size:4rem;margin-bottom:20px">📁</div>
     <p style="font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:12px;line-height:1.5">
@@ -551,6 +551,8 @@ function setSortMode(mode) {
 }
 
 function newPoem() {
+  // El programa no puede funcionar sin carpeta: verificar antes de crear.
+  if (!dirHandle) { requireFolder(); return; }
   const tab = openNewTab(null);
   createTabPanel(tab);
   activateTab(tab.id);
@@ -1340,6 +1342,8 @@ function confirmDelete() {
   showToast('Eliminado');
 }
 function loadPoem(id) {
+  // El programa no puede funcionar sin carpeta: verificar antes de abrir.
+  if (!dirHandle) { requireFolder(); return; }
   const poem = getSavedPoems().find(p=>p.id==id);
   if (!poem) return;
   // Check if already open in a tab
@@ -1419,6 +1423,8 @@ function showSaveModal() { saveActiveTab(); }
 function closeModal() { closeVbModal(); }
 
 async function saveActiveTab() {
+  // El programa no puede funcionar sin carpeta: verificar antes de guardar.
+  if (!dirHandle) { requireFolder(); return; }
   const tab = getActiveTab();
   if (!tab) return;
   const ta = document.getElementById('ta-'+tab.id);
@@ -1596,29 +1602,41 @@ function debounceAnalyze() {
 $('vb-overlay').addEventListener('click', e => { if(e.target===$('vb-overlay')) closeVbModal(); });
 async function chooseFolderAndStart() {
   await chooseFolder();
-  if (dirHandle) {
-    $('folder-modal').classList.add('hidden');
-    localStorage.setItem('verbium_folder_skipped', '0');
-  }
+  // Solo se cierra el modal si de verdad se eligió una carpeta.
+  if (dirHandle) $('folder-modal').classList.add('hidden');
 }
 
-function skipFolderChoice() {
-  $('folder-modal').classList.add('hidden');
-  localStorage.setItem('verbium_folder_skipped', '1');
-  showToast('Guardando en el navegador. Puedes elegir carpeta en cualquier momento.');
+// Fuerza a elegir carpeta. El programa no funciona sin ella, así que este modal
+// no puede cerrarse hasta que haya una carpeta seleccionada.
+function requireFolder() {
+  const modal = $('folder-modal');
+  if (!modal) return;
+  const box = modal.querySelector('.modal-card');
+  if (box) {
+    if (!supportsFS) {
+      box.innerHTML =
+        '<div style="font-size:4rem;margin-bottom:20px">⚠️</div>' +
+        '<p style="font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:12px;line-height:1.5">Este navegador no permite guardar en una carpeta de tu equipo.</p>' +
+        '<p style="font-size:.85rem;color:var(--ink50);line-height:1.5">Abre Verbium en Chrome, Edge u Opera de escritorio para poder trabajar.</p>';
+    } else {
+      box.innerHTML =
+        '<div style="font-size:4rem;margin-bottom:20px">📁</div>' +
+        '<p style="font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:12px;line-height:1.5">Elige una carpeta para comenzar</p>' +
+        '<p style="font-size:.82rem;color:var(--ink50);line-height:1.5;margin-bottom:20px">Verbium guarda cada poema como un archivo en la carpeta que elijas. Sin carpeta no puede funcionar.</p>' +
+        '<button class="btn-primary" style="width:100%" onclick="chooseFolderAndStart()">Elegir carpeta</button>';
+    }
+  }
+  modal.classList.remove('hidden');
 }
 
 window.onload = () => {
   loadTheme();
   updateFolderUI();
   renderSidebar();
-  // Show folder picker on first load unless user already skipped
-  const skipped = localStorage.getItem('verbium_folder_skipped');
-  if (!skipped && supportsFS) {
-    $('folder-modal').classList.remove('hidden');
-  } else {
-    $('folder-modal').classList.add('hidden');
-  }
+  // Al inicio de cada sesión se fuerza la selección de carpeta.
+  // Los permisos de carpeta no persisten entre recargas, así que siempre se pide.
+  if (dirHandle) $('folder-modal').classList.add('hidden');
+  else requireFolder();
 };
 
 
