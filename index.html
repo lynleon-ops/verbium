@@ -310,7 +310,7 @@ tbody tr:hover{background:var(--rust-lt)}
 
   <!-- Footer -->
   <div class="footer" style="flex-shrink:0">
-    <span>© 2026 Verbium v21.3. Todos los derechos reservados.</span>
+    <span>© 2026 Verbium v21.4. Todos los derechos reservados.</span>
     <span id="footer-folder" style="display:none;color:var(--gold);font-weight:500">📁 <span id="footer-folder-name"></span></span>
     <div class="footer-right">
       <span style="font-family:'Georgia',serif;line-height:1.3;text-align:center;display:inline-block">
@@ -438,10 +438,10 @@ function createTabPanel(tab) {
       <textarea id="ta-${tab.id}" placeholder="Pega o escribe aquí tu poema..." style="width:100%;min-height:160px;resize:vertical;background:var(--bg2);border:1px solid var(--border);padding:16px;color:var(--ink);font:inherit;font-size:.95rem;line-height:1.6;outline:none">${escHtml(tab.text)}</textarea>
       <div class="status" id="status-${tab.id}">Versos: <span id="vc-${tab.id}">0</span></div>
       <div class="actions">
-        <button onclick="saveActiveTab()">Guardar</button>
+        <button onclick="analyzeActiveTab()">Analizar</button>
         <button onclick="clearActiveTab()">Limpiar</button>
         <button onclick="copyActiveTab()">Copiar</button>
-        <button class="btn-primary" style="margin-left:auto" onclick="analyzeActiveTab()">Analizar →</button>
+        <button class="btn-primary" style="margin-left:auto;display:inline-flex;align-items:center;gap:6px" onclick="saveActiveTab()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"><path d="M2.75 2h7.19a.75.75 0 0 1 .53.22l2.31 2.31a.75.75 0 0 1 .22.53v8.19a.75.75 0 0 1-.75.75H2.75a.75.75 0 0 1-.75-.75V2.75A.75.75 0 0 1 2.75 2Z"/><path d="M4.75 2v3.5h5.5V2"/><path d="M4.75 14V9.25h6.5V14"/></svg>Guardar</button>
       </div>
     </div>
     <div id="results-${tab.id}" style="display:none;flex-direction:column;gap:8px">
