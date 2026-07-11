@@ -100,6 +100,12 @@ body{background:var(--bg3);color:var(--ink);font-family:Inter,-apple-system,Blin
 .sidebar-card-sub{font-size:.62rem;color:var(--ink50);margin-top:3px}
 .sidebar-card-del{background:transparent;border:none;color:var(--ink50);cursor:pointer;padding:3px;border-radius:4px;line-height:0;font-size:inherit;font-weight:normal;letter-spacing:normal;text-transform:none;min-width:0}
 .sidebar-card-del:hover{color:var(--rust);background:var(--rust-lt)}
+.sidebar-card-pin{background:transparent;border:none;color:var(--ink30);cursor:pointer;padding:3px;border-radius:4px;line-height:0;font-size:inherit;font-weight:normal;letter-spacing:normal;text-transform:none;min-width:0}
+.sidebar-card-pin:hover{color:var(--gold);background:var(--gold-lt)}
+.sidebar-card.pinned{border-color:var(--gold);background:var(--gold-lt)}
+.sidebar-card.pinned .sidebar-card-pin{color:var(--gold)}
+.pin-divider{display:flex;align-items:center;gap:6px;margin:4px 2px 8px;color:var(--ink30);font-size:.58rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+.pin-divider::after{content:"";flex:1;height:1px;background:var(--border)}
 .sidebar-empty{color:var(--ink50);font-size:.78rem;padding:16px 8px;line-height:1.6;text-align:center}
 .sidebar-folder{padding:6px 10px;border-top:1px solid var(--border);font-size:11px;color:var(--ink50)}
 .sidebar-folder button{font-size:11px;padding:4px 8px;margin-top:4px;width:100%;text-transform:none;letter-spacing:0;font-weight:500}
@@ -109,13 +115,13 @@ body{background:var(--bg3);color:var(--ink);font-family:Inter,-apple-system,Blin
 .ribbon::-webkit-scrollbar{height:0}
 .ribbon-btn{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:5px;min-width:62px;padding:6px 10px;border:none;background:transparent;border-radius:8px;cursor:pointer;color:var(--ink50);text-transform:uppercase;letter-spacing:.05em;font-size:.6rem;font-weight:600;line-height:1;flex-shrink:0}
 .ribbon-btn:hover:not(.active){background:var(--bg3);color:var(--ink)}
-.ribbon-btn svg{width:22px;height:22px;color:var(--ink50)}
+.ribbon-btn svg{width:22px;height:22px;fill:var(--ink50);flex-shrink:0;pointer-events:none}
 .ribbon-btn .ribbon-label{white-space:nowrap}
-.ribbon-btn .ic-new{color:var(--gold)}
-.ribbon-btn .ic-folder{color:#bf8700}
-.ribbon-btn.connected .ic-folder{color:var(--green)}
+.ribbon-btn .ic-new{fill:var(--gold)}
+.ribbon-btn .ic-folder{fill:#bf8700}
+.ribbon-btn.connected .ic-folder{fill:var(--green)}
 .ribbon-btn.active{background:var(--gold);color:#fff}
-.ribbon-btn.active svg{color:#fff}
+.ribbon-btn.active svg,.ribbon-btn.active .ic-new,.ribbon-btn.active .ic-folder{fill:#fff}
 .ribbon-sep{width:1px;background:var(--border);margin:6px 6px;flex-shrink:0}
 
 /* Sidebar title + search */
@@ -333,7 +339,8 @@ tbody tr:hover{background:var(--rust-lt)}
     <div class="main-panel">
 
       <!-- Tabs bar -->
-      <div class="tabsbar" id="tabsbar"></div>
+      <!-- Barra de pestañas eliminada: se trabaja con un poema a la vez -->
+      <div id="tabsbar" style="display:none"></div>
 
       <!-- Tab panels container -->
       <div class="tab-panels" id="tab-panels">
@@ -349,7 +356,7 @@ tbody tr:hover{background:var(--rust-lt)}
 
   <!-- Footer -->
   <div class="footer" style="flex-shrink:0">
-    <span>© 2026 Verbium v21.6. Todos los derechos reservados.</span>
+    <span>© 2026 Verbium v21.7. Todos los derechos reservados.</span>
     <span id="footer-folder" style="display:none;color:var(--gold);font-weight:500">📁 <span id="footer-folder-name"></span></span>
     <div class="footer-right">
       <span style="font-family:'Georgia',serif;line-height:1.3;text-align:center;display:inline-block">
@@ -404,6 +411,15 @@ let nextTabId = 1;
 function getActiveTab() { return tabs.find(t=>t.id===activeTabId)||null; }
 
 function openNewTab(poem=null) {
+  // Un solo poema abierto a la vez (ya no hay barra de pestañas):
+  // se cierran los abiertos antes de abrir el nuevo.
+  for (const t of [...tabs]) {
+    if (t.dirty && !confirm('¿Cerrar "'+t.name+'" sin guardar?')) return null;
+    tabs = tabs.filter(x=>x.id!==t.id);
+    const panel = document.getElementById('panel-'+t.id);
+    if (panel) panel.remove();
+  }
+  activeTabId = null;
   const id = nextTabId++;
   const name = poem ? poem.name : 'Sin título';
   const tab = { id, name, poem, text: poem?poem.text:'', dirty:false, results:null };
@@ -609,16 +625,66 @@ function setSearchQuery(q) {
 
 function newPoem() {
   const tab = openNewTab(null);
+  if (!tab) return;
   createTabPanel(tab);
   activateTab(tab.id);
   // Ask for name after panel is created
   setTimeout(() => forceNameThenSave(tabs[tabs.length-1]), 50);
 }
 
+/* ── Pins (máx. 3 poemas fijados arriba) ─────────────────── */
+const PIN_KEY = 'verbium_pins';
+const MAX_PINS = 3;
+
+function getPins() {
+  try { const v = JSON.parse(localStorage.getItem(PIN_KEY)||'[]'); return Array.isArray(v) ? v.map(String) : []; }
+  catch { return []; }
+}
+function isPinned(id) { return getPins().includes(String(id)); }
+function togglePin(id) {
+  id = String(id);
+  const pins = getPins();
+  const i = pins.indexOf(id);
+  if (i >= 0) { pins.splice(i,1); showToast('Desfijado'); }
+  else {
+    if (pins.length >= MAX_PINS) { showToast('Solo puedes fijar '+MAX_PINS+' poemas'); return; }
+    pins.push(id); showToast('Fijado arriba');
+  }
+  localStorage.setItem(PIN_KEY, JSON.stringify(pins));
+  renderSidebar();
+}
+
+function poemCardHtml(p, now) {
+  const d = new Date(p.date);
+  const isToday = d.toDateString()===now.toDateString();
+  const isYest  = new Date(now-86400000).toDateString()===d.toDateString();
+  const dateStr = isToday ? 'Hoy, '+d.getHours()+':'+String(d.getMinutes()).padStart(2,'0')
+                : isYest  ? 'Ayer'
+                : d.getDate()+' '+['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][d.getMonth()]+' '+d.getFullYear();
+  const activeTab = getActiveTab();
+  const activePoemId = activeTab && activeTab.poem ? activeTab.poem.id : null;
+  const active = p.id==activePoemId ? ' active' : '';
+  const pinned = isPinned(p.id);
+  const idAttr = escHtml(String(p.id)).replace(/"/g,'&quot;');
+  const pinIcon = pinned
+    ? '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M9.5.75a.75.75 0 0 0-1.28-.53L6.03 2.41a2.75 2.75 0 0 1-1.4.76l-1.6.32a.75.75 0 0 0-.38 1.27l3.3 3.3-3.72 4.65a.75.75 0 0 0 1.06 1.06l4.65-3.72 3.3 3.3a.75.75 0 0 0 1.27-.38l.32-1.6c.11-.55.37-1.04.76-1.4l2.19-2.19a.75.75 0 0 0-.53-1.28H9.5V.75Z"/></svg>'
+    : '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"><path d="M9.6 1.9 14.1 6.4l-2 2a3 3 0 0 0-.85 1.6l-.3 1.5-4.2-4.2M9.6 1.9l-2 2a3 3 0 0 1-1.6.85l-1.5.3 4.2 4.2M6.75 9.25 3 13"/></svg>';
+  return `<div class="sidebar-card${active}${pinned?' pinned':''}" data-id="${idAttr}">
+    <div class="sidebar-card-top">
+      <span class="sidebar-card-title">${escHtml(p.name)}</span>
+      <button class="sidebar-card-pin" data-id="${idAttr}" title="${pinned?'Desfijar':'Fijar arriba'}">${pinIcon}</button>
+      <button class="sidebar-card-del" data-id="${idAttr}" title="Eliminar">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M11 1.75V3h2.25a.75.75 0 0 1 0 1.5H2.75a.75.75 0 0 1 0-1.5H5V1.75C5 .784 5.784 0 6.75 0h2.5C10.216 0 11 .784 11 1.75ZM4.496 6.675l.66 6.6a.25.25 0 0 0 .249.225h5.19a.25.25 0 0 0 .249-.225l.66-6.6a.75.75 0 0 1 1.492.149l-.66 6.6A1.748 1.748 0 0 1 10.595 15h-5.19a1.75 1.75 0 0 1-1.741-1.576l-.66-6.6a.75.75 0 1 1 1.492-.149Z"/></svg>
+      </button>
+    </div>
+    <div class="sidebar-card-sub">Última edición: ${dateStr}</div>
+  </div>`;
+}
+
 function renderSidebar() {
   const list = document.getElementById('sidebar-list');
   if (!list) return;
-  // Delegación de eventos: un solo listener para abrir/borrar (robusto ante
+  // Delegación de eventos: un solo listener para abrir/fijar/borrar (robusto ante
   // nombres de archivo con caracteres especiales).
   if (!list.dataset.bound) {
     list.dataset.bound = '1';
@@ -639,31 +705,23 @@ function renderSidebar() {
   }
 
   const now = new Date();
-  list.innerHTML = poems.map(p => {
-    const d = new Date(p.date);
-    const isToday = d.toDateString()===now.toDateString();
-    const isYest  = new Date(now-86400000).toDateString()===d.toDateString();
-    const dateStr = isToday ? 'Hoy, '+d.getHours()+':'+String(d.getMinutes()).padStart(2,'0')
-                  : isYest  ? 'Ayer'
-                  : d.getDate()+' '+['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][d.getMonth()]+' '+d.getFullYear();
-    const activeTab = getActiveTab();
-    const activePoemId = activeTab && activeTab.poem ? activeTab.poem.id : null;
-    const active = p.id==activePoemId ? ' active' : '';
-    const idAttr = escHtml(String(p.id)).replace(/"/g,'&quot;');
-    return `<div class="sidebar-card${active}" data-id="${idAttr}">
-      <div class="sidebar-card-top">
-        <span class="sidebar-card-title">${escHtml(p.name)}</span>
-        <button class="sidebar-card-del" data-id="${idAttr}" title="Eliminar">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M11 1.75V3h2.25a.75.75 0 0 1 0 1.5H2.75a.75.75 0 0 1 0-1.5H5V1.75C5 .784 5.784 0 6.75 0h2.5C10.216 0 11 .784 11 1.75ZM4.496 6.675l.66 6.6a.25.25 0 0 0 .249.225h5.19a.25.25 0 0 0 .249-.225l.66-6.6a.75.75 0 0 1 1.492.149l-.66 6.6A1.748 1.748 0 0 1 10.595 15h-5.19a1.75 1.75 0 0 1-1.741-1.576l-.66-6.6a.75.75 0 1 1 1.492-.149Z"/></svg>
-        </button>
-      </div>
-      <div class="sidebar-card-sub">Última edición: ${dateStr}</div>
-    </div>`;
-  }).join('');
+  const pinned = poems.filter(p => isPinned(p.id));
+  const rest   = poems.filter(p => !isPinned(p.id));
+
+  let html = '';
+  if (pinned.length) {
+    html += '<div class="pin-divider">Fijados</div>';
+    html += pinned.map(p => poemCardHtml(p, now)).join('');
+    if (rest.length) html += '<div class="pin-divider">Todos</div>';
+  }
+  html += rest.map(p => poemCardHtml(p, now)).join('');
+  list.innerHTML = html;
 }
 
-// Maneja clics en la lista de poemas (abrir tarjeta / borrar con la papelera).
+// Maneja clics en la lista de poemas (abrir tarjeta / fijar / borrar).
 function onSidebarClick(e) {
+  const pinBtn = e.target.closest('.sidebar-card-pin');
+  if (pinBtn) { e.stopPropagation(); togglePin(pinBtn.dataset.id); return; }
   const delBtn = e.target.closest('.sidebar-card-del');
   if (delBtn) { e.stopPropagation(); deletePoemDirect(delBtn.dataset.id); return; }
   const card = e.target.closest('.sidebar-card');
@@ -678,6 +736,10 @@ async function deletePoemDirect(id) {
   const openTab = tabs.find(t=>t.poem && t.poem.id==id);
   if (openTab) closeTab(openTab.id);
   await deletePoemFromStorage(id);
+  // Limpiar el pin si el poema estaba fijado
+  const pins = getPins().filter(p => p !== String(id));
+  localStorage.setItem(PIN_KEY, JSON.stringify(pins));
+  renderSidebar();
   showToast('Eliminado: ' + poem.name);
 }
 
@@ -1432,6 +1494,7 @@ function loadPoem(id) {
   if (existing) { activateTab(existing.id); return; }
   // Open in new tab
   const tab = openNewTab(poem);
+  if (!tab) return;
   createTabPanel(tab);
   activateTab(tab.id);
   showToast(`Cargado: ${poem.name}`);
