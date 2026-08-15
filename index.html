@@ -151,10 +151,13 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-lt)}
 
 /* Buttons */
 button{border-radius:var(--radius);border:1px solid var(--border);background:var(--bg2);color:var(--ink);padding:9px 24px;font-family:Inter,sans-serif;font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
-button:hover:not(:disabled):not(.btn-primary):not(.btn-dark){background:var(--bg)}
+button:hover:not(:disabled):not(.btn-primary):not(.btn-dark):not(.btn-save){background:var(--bg)}
 button:disabled{opacity:.4;cursor:not-allowed}
 .btn-primary{background:var(--gold);color:#fff;border-color:var(--gold);transition:background .2s}
 .btn-primary:hover{background:#3d2e08}
+.btn-save{background:#f97316;color:#fff;border-color:#f97316;transition:background .2s,border-color .2s,transform .1s}
+.btn-save:hover{background:#ea580c;border-color:#ea580c}
+.btn-save:active{background:#c2410c;border-color:#c2410c;transform:scale(.98)}
 .btn-dark{background:var(--th-bg);color:var(--bg);border-color:var(--th-bg);transition:background .15s,transform .1s}
 .btn-dark:hover{background:#3a3a4a;color:#fff;border-color:#3a3a4a}
 .btn-dark:active{background:#111118;transform:scale(.97)}
@@ -204,27 +207,6 @@ tbody tr:hover{background:var(--rust-lt)}
 /* Acento Rítmico */
 
 
-/* File browser */
-.saved-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:4px}
-.saved-empty,.file-empty{grid-column:1/-1;padding:32px 16px;color:var(--ink50);font-size:.85rem;text-align:center;letter-spacing:.04em;font-style:italic}
-.saved-card{display:flex;flex-direction:column;align-items:center;gap:0;background:rgba(255,255,255,.92);box-shadow:var(--shadow-sm);padding:12px 8px 10px;cursor:pointer;border-bottom:2px solid transparent}
-[data-theme="dark"] .saved-card{background:rgba(46,46,56,.95)}
-.saved-card:nth-child(even){background:rgba(240,236,228,.65)}
-[data-theme="dark"] .saved-card:nth-child(even){background:rgba(38,38,48,.95)}
-.saved-card:hover{background:var(--gold-lt);box-shadow:var(--shadow-md)}
-.saved-card.selected{background:var(--gold-lt);border-bottom:2px solid var(--gold)}
-.file-icon-wrap{position:relative;width:86px;height:104px;flex:0 0 104px;display:block}
-.file-body{width:86px;height:104px;background:var(--bg2);border:1.5px solid var(--border-md);position:absolute;top:0;left:0}
-.file-fold-cover{width:26px;height:26px;background:var(--bg2);position:absolute;top:0;right:0;clip-path:polygon(0 0,100% 0,0 100%);border-top:1.5px solid var(--border-md);border-left:1.5px solid var(--border-md);z-index:2}
-.file-fold{width:26px;height:26px;background:var(--bg);position:absolute;top:0;right:0;clip-path:polygon(0 100%,100% 100%,0 0);z-index:1}
-.file-lines{position:absolute;top:30px;left:10px;right:10px;display:flex;flex-direction:column;gap:6px}
-.file-line{height:1.5px;background:var(--border-md)}
-.file-line.gold{background:var(--gold);opacity:.7}
-.saved-info{width:100%;text-align:center}
-.saved-name{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.82rem;font-weight:700;color:rgb(139,58,15);text-align:center;width:100%;margin-top:6px}
-.saved-date, .file-date{display:none}
-.saved-actions{display:flex;gap:8px;padding:12px 0 4px;flex-wrap:wrap}
-
 /* Footer */
 .footer{background:var(--bg2);border:1px solid var(--border);border-bottom:2px solid var(--gold);padding:16px 20px;font-size:13px;letter-spacing:.04em;display:flex;gap:12px;align-items:center;flex-wrap:wrap;color:var(--ink50)}
 .footer-sep{width:1px;height:12px;background:var(--border-md)}
@@ -247,8 +229,8 @@ tbody tr:hover{background:var(--rust-lt)}
 .theme-toggle{background:none;border:1px solid var(--border);padding:6px 10px;font-size:14px;cursor:pointer;color:var(--ink)}
 
 /* Responsive */
-@media(max-width:900px){.metrics-grid{grid-template-columns:repeat(2,1fr)}.saved-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:640px){h1{letter-spacing:.18em}.box{padding:16px}.saved-grid{grid-template-columns:1fr}.metrics-grid{grid-template-columns:1fr 1fr}.actions button{flex:1}}
+@media(max-width:900px){.metrics-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){h1{letter-spacing:.18em}.box{padding:16px}.metrics-grid{grid-template-columns:1fr 1fr}.actions button{flex:1}}
 
 /* ── Mobile sidebar overlay & toggle ───────────────────── */
 .sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:40;opacity:0;pointer-events:none;transition:opacity .25s}
@@ -458,7 +440,7 @@ tbody tr:hover{background:var(--rust-lt)}
 
   <!-- Footer -->
   <div class="footer" style="flex-shrink:0">
-    <span>© 2026 Verbium v22.0. Todos los derechos reservados.</span>
+    <span>© 2026 Verbium v25.0. Todos los derechos reservados.</span>
     <span id="footer-folder" style="display:none;color:var(--gold);font-weight:500">📁 <span id="footer-folder-name"></span></span>
     <div class="footer-right">
       <span style="font-family:'Georgia',serif;line-height:1.3;text-align:center;display:inline-block">
@@ -575,10 +557,10 @@ function createTabPanel(tab) {
       <textarea id="ta-${tab.id}" placeholder="Pega o escribe aquí tu poema..." style="width:100%;min-height:160px;resize:vertical;background:var(--bg2);border:1px solid var(--border);padding:16px;color:var(--ink);font:inherit;font-size:.95rem;line-height:1.6;outline:none">${escHtml(tab.text)}</textarea>
       <div class="status" id="status-${tab.id}">Versos: <span id="vc-${tab.id}">0</span></div>
       <div class="actions">
-        <button onclick="saveActiveTab()">Guardar</button>
+        <button onclick="analyzeActiveTab()">Analizar →</button>
         <button onclick="clearActiveTab()">Limpiar</button>
         <button onclick="copyActiveTab()">Copiar</button>
-        <button class="btn-primary" style="margin-left:auto" onclick="analyzeActiveTab()">Analizar →</button>
+        <button class="btn-save" style="margin-left:auto" onclick="saveActiveTab()">Guardar</button>
       </div>
     </div>
     <div id="results-${tab.id}" style="display:none;flex-direction:column;gap:8px">
@@ -634,22 +616,6 @@ function createTabPanel(tab) {
     // Set textarea value
     ta.value = tab.text || '';
   }, 0);
-}
-
-// Bridge functions — these replace the old global functions
-async function saveActiveTab() {
-  const tab = getActiveTab();
-  if (!tab) return;
-  const ta = document.getElementById('ta-'+tab.id);
-  if (!ta || !ta.value.trim()) { showToast('No hay poema para guardar'); return; }
-  tab.text = ta.value;
-  // If no poem linked yet, ask for name
-  if (!tab.poem) {
-    forceNameThenSave(tab);
-  } else {
-    // Overwrite existing
-    await writePoemToStorage(tab, tab.poem.name, tab.text);
-  }
 }
 
 function clearActiveTab() {
@@ -709,33 +675,55 @@ function renderSidebar() {
   }
 
   const now = new Date();
-  list.innerHTML = poems.map(p => {
+  const activeTab = getActiveTab();
+  const activePoemId = activeTab && activeTab.poem ? activeTab.poem.id : null;
+  list.replaceChildren();
+
+  poems.forEach(p => {
     const d = new Date(p.date);
     const isToday = d.toDateString()===now.toDateString();
     const isYest  = new Date(now-86400000).toDateString()===d.toDateString();
     const dateStr = isToday ? 'Hoy, '+d.getHours()+':'+String(d.getMinutes()).padStart(2,'0')
                   : isYest  ? 'Ayer'
                   : d.getDate()+' '+['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][d.getMonth()]+' '+d.getFullYear();
-    const activeTab = getActiveTab();
-    const activePoemId = activeTab && activeTab.poem ? activeTab.poem.id : null;
-    const active = p.id==activePoemId ? ' active' : '';
-    return `<div class="sidebar-card${active}" onclick='loadPoem(${JSON.stringify(p.id)})'>
-      <div class="sidebar-card-top">
-        <span class="sidebar-card-title">${escHtml(p.name)}</span>
-        <button class="sidebar-card-del" onclick='event.stopPropagation();deletePoemDirect(${JSON.stringify(p.id)})' title="Eliminar">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M11 1.75V3h2.25a.75.75 0 0 1 0 1.5H2.75a.75.75 0 0 1 0-1.5H5V1.75C5 .784 5.784 0 6.75 0h2.5C10.216 0 11 .784 11 1.75ZM4.496 6.675l.66 6.6a.25.25 0 0 0 .249.225h5.19a.25.25 0 0 0 .249-.225l.66-6.6a.75.75 0 0 1 1.492.149l-.66 6.6A1.748 1.748 0 0 1 10.595 15h-5.19a1.75 1.75 0 0 1-1.741-1.576l-.66-6.6a.75.75 0 1 1 1.492-.149Z"/></svg>
-        </button>
-      </div>
-      <div class="sidebar-card-sub">Last Edition: ${dateStr}</div>
-    </div>`;
-  }).join('');
+    const card = document.createElement('div');
+    card.className = 'sidebar-card' + (p.id==activePoemId ? ' active' : '');
+    card.addEventListener('click', () => loadPoem(p.id));
+
+    const top = document.createElement('div');
+    top.className = 'sidebar-card-top';
+
+    const title = document.createElement('span');
+    title.className = 'sidebar-card-title';
+    title.textContent = p.name;
+
+    const deleteButton = document.createElement('button');
+    deleteButton.className = 'sidebar-card-del';
+    deleteButton.type = 'button';
+    deleteButton.title = 'Eliminar';
+    deleteButton.setAttribute('aria-label', `Eliminar ${p.name}`);
+    deleteButton.innerHTML = '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M11 1.75V3h2.25a.75.75 0 0 1 0 1.5H2.75a.75.75 0 0 1 0-1.5H5V1.75C5 .784 5.784 0 6.75 0h2.5C10.216 0 11 .784 11 1.75ZM4.496 6.675l.66 6.6a.25.25 0 0 0 .249.225h5.19a.25.25 0 0 0 .249-.225l.66-6.6a.75.75 0 0 1 1.492.149l-.66 6.6A1.748 1.748 0 0 1 10.595 15h-5.19a1.75 1.75 0 0 1-1.741-1.576l-.66-6.6a.75.75 0 1 1 1.492-.149Z"/></svg>';
+    deleteButton.addEventListener('click', event => {
+      event.stopPropagation();
+      deletePoemDirect(p.id);
+    });
+
+    const sub = document.createElement('div');
+    sub.className = 'sidebar-card-sub';
+    sub.textContent = 'Última edición: ' + dateStr;
+
+    top.append(title, deleteButton);
+    card.append(top, sub);
+    list.appendChild(card);
+  });
 }
 
-function deletePoemDirect(id) {
+async function deletePoemDirect(id) {
   const poem = getSavedPoems().find(p=>p.id==id);
   if (!poem) return;
-  if (!confirm('¿Eliminar "' + poem.name + '"?')) return; // TODO: use alertVbModal
-  deletePoemFromStorage(id);
+  if (!confirm('¿Eliminar "' + poem.name + '"?')) return;
+  const deleted = await deletePoemFromStorage(id);
+  if (!deleted) return;
   // Close tab if this poem is open
   const openTab = tabs.find(t=>t.poem && t.poem.id==id);
   if (openTab) closeTab(openTab.id);
@@ -750,16 +738,10 @@ async function chooseFolder() {
   if (!supportsFS) { showToast('Tu navegador no soporta esta función (usa Chrome/Edge en PC o Safari en Mac)'); return; }
   try {
     dirHandle = await window.showDirectoryPicker({ id: 'verbium-poems', mode: 'readwrite' });
-    localStorage.setItem('verbium_folder_chosen', '1');
+    window._folderPoems = [];
     updateFolderUI();
     await syncFolderPoems();
   } catch (e) { /* user cancelled */ }
-}
-
-async function restoreFolderHandle() {
-  // Browsers don't persist handles across reloads without IndexedDB.
-  // We simply prompt again on first save if a folder was chosen before.
-  updateFolderUI();
 }
 
 function updateFolderUI() {
@@ -782,19 +764,6 @@ function updateFolderUI() {
       footerFolder.style.display = 'none';
     }
   }
-}
-
-async function saveToFolder(name, text) {
-  if (!dirHandle) return false;
-  try {
-    const safeName = name.replace(/[\\/:*?"<>|]/g,'-') + '.txt';
-    const fileHandle = await dirHandle.getFileHandle(safeName, { create: true });
-    const writable = await fileHandle.createWritable();
-    await writable.write(text);
-    await writable.close();
-    await syncFolderPoems();
-    return true;
-  } catch (e) { showToast('No se pudo guardar: ' + e.message); return false; }
 }
 
 async function syncFolderPoems() {
@@ -950,14 +919,6 @@ function tonicIndex(word) {
   for (let i = 0; i < n; i++) if (/[áéíóú]/.test(syls[i])) return i;
   if (n === 1) return 0;
   return /[aeioun s]/.test(clean[clean.length-1]) ? n-2 : n-1;
-}
-function buildTonicMap(wordSyllables) {
-  const map = [];
-  for (const {word,syllables} of wordSyllables) {
-    const ti = tonicIndex(word);
-    syllables.forEach((_,i) => map.push(i === ti));
-  }
-  return map;
 }
 function buildMetricTonicMap(wordSyllables, sylData) {
   const gramTonic = [];
@@ -1357,143 +1318,104 @@ function loadTheme() {
 }
 
 /* ── Storage ────────────────────────────────────────────── */
+function normalizePoem(poem, index=0) {
+  if (!poem || typeof poem !== 'object') return null;
+  const rawText = poem.text ?? poem.content ?? poem.body ?? poem.value ??
+    (typeof poem.poem === 'string' ? poem.poem : '');
+  const rawName = poem.name ?? poem.title ?? poem.filename ?? `Poema ${index + 1}`;
+  const rawId = poem.id ?? poem.key ?? `legacy-${index}-${String(rawName)}`;
+  const rawDate = poem.date ?? poem.updatedAt ?? poem.createdAt ?? new Date(0).toISOString();
+  const date = Number.isNaN(new Date(rawDate).getTime()) ? new Date(0).toISOString() : rawDate;
+  return {
+    ...poem,
+    id: rawId,
+    name: String(rawName),
+    text: typeof rawText === 'string' ? rawText : String(rawText ?? ''),
+    date
+  };
+}
+
+function readLocalPoems() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    return Array.isArray(stored) ? stored.map(normalizePoem).filter(Boolean) : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeLocalPoems(poems) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(poems.slice(0, 50)));
+    return true;
+  } catch {
+    showToast('No se pudo guardar en el navegador');
+    return false;
+  }
+}
+
+function upsertLocalBackup(poem, previousId=null) {
+  const poems = readLocalPoems();
+  const index = poems.findIndex(item =>
+    item.id == poem.id ||
+    (previousId != null && item.id == previousId) ||
+    item.name.toLocaleLowerCase('es') === poem.name.toLocaleLowerCase('es')
+  );
+  if (index >= 0) poems.splice(index, 1);
+  poems.unshift(poem);
+  return writeLocalPoems(poems);
+}
+
 const getSavedPoems = () => {
-  const local = (() => { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); } catch { return []; } })();
-  if (dirHandle && window._folderPoems && window._folderPoems.length) return window._folderPoems;
-  return local;
+  if (dirHandle && Array.isArray(window._folderPoems)) {
+    return window._folderPoems.map(normalizePoem).filter(Boolean);
+  }
+  return readLocalPoems();
 };
-async function savePoemToStorage(name, text) {
-  if (dirHandle) {
-    const ok = await saveToFolder(name, text);
-    if (ok) { await syncFolderPoems(); return; }
-  }
-  const poems = getSavedPoems();
-  poems.unshift({id:Date.now(), name:name.trim(), text, date:new Date().toISOString()});
-  if (poems.length > 20) poems.pop();
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(poems));
-  updateSavedPanel();
-}
-function deletePoemFromStorage(id) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(getSavedPoems().filter(p=>p.id!==id)));
-  updateSavedPanel();
-}
-function clearAllPoems() {
-  if (!getSavedPoems().length) { showToast('No hay poemas guardados'); return; }
-  localStorage.removeItem(STORAGE_KEY);
-  updateSavedPanel();
-  showToast('Poemas eliminados');
-}
-function updateSavedPanel() {
-  renderSidebar();
-}
 
-let selectedFileId = null;
-let currentLoadedPoem = null; // tracks the poem currently loaded in editor
-
-function renderFileBrowser(poems) {
-  // Legacy function - replaced by renderSidebar
-  renderSidebar();
-  
-  if (!poems.length) {
-    grid.innerHTML = '<div class="saved-empty">No hay poemas guardados aún</div>';
-    actions.style.display = 'none';
-    selectedFileId = null;
-    return;
-  }
-  const linePatterns = [
-    ['gold','','','gold','','short'],
-    ['','gold','','short','gold',''],
-    ['gold','','short','','gold','short'],
-    ['','','gold','','short','gold'],
-  ];
-  grid.innerHTML = poems.map((p, i) => {
-    const pat = linePatterns[i % linePatterns.length];
-    const lines = pat.map(c => `<div class="file-line${c==='gold'?' gold':''}" ${c==='short'?'style="width:60%"':''}></div>`).join('');
-    const d = new Date(p.date);
-    const now = new Date();
-    const isToday = d.toDateString()===now.toDateString();
-    const isYesterday = new Date(now-86400000).toDateString()===d.toDateString();
-    const dateStr = isToday ? 'Hoy, '+d.getHours()+':'+String(d.getMinutes()).padStart(2,'0')
-                  : isYesterday ? 'Ayer'
-                  : d.getDate()+' '+['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][d.getMonth()];
-    const sel = p.id===selectedFileId ? ' selected' : '';
-    return `<div class="saved-card${sel?' selected':''}" onclick="selectFile(${p.id})" ondblclick="loadSelectedFile()">
-      <div class="file-icon-wrap">
-        <div class="file-body">
-          <div class="file-fold-cover"></div>
-          <div class="file-fold"></div>
-          <div class="file-lines">${lines}</div>
-        </div>
-      </div>
-      <div class="saved-info"><span class="saved-name">${escHtml(p.name.length>22?p.name.substring(0,22)+'…':p.name)}</span></div>
-      <div class="file-date">${dateStr}</div>
-    </div>`;
-  }).join('');
-  actions.style.display = selectedFileId ? 'flex' : 'none';
-}
-
-function selectFile(id) {
-  selectedFileId = selectedFileId===id ? null : id;
-  renderFileBrowser(getSavedPoems());
-}
-function loadSelectedFile() {
-  if (selectedFileId) { loadPoem(selectedFileId); selectedFileId=null; }
-}
-function renameSelectedFile() {
-  if (!selectedFileId) return;
-  const poem = getSavedPoems().find(p=>p.id==selectedFileId);
-  if (!poem) return;
-  openVbModal(
-    `<h2 style="margin-bottom:8px">Renombrar</h2>
-     <input type="text" id="vb-rename-input" value="${escHtml(poem.name)}" autocomplete="off" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius);font:inherit;background:var(--bg);color:var(--ink);margin-bottom:16px">
-     <div class="modal-actions"><button data-cancel>Cancelar</button><button data-ok class="btn-primary">Renombrar</button></div>`,
-    () => {
-      const newName = document.getElementById('vb-rename-input').value.trim();
-      if (!newName) return false;
-      const poems = getSavedPoems().map(p=>p.id==selectedFileId?{...p,name:newName}:p);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(poems));
-      updateSavedPanel();
-      showToast('Renombrado: '+newName);
-      return true;
+async function deletePoemFromStorage(id) {
+  let folderDeleted = true;
+  if (dirHandle && typeof id === 'string') {
+    try {
+      await dirHandle.removeEntry(id);
+      await syncFolderPoems();
+    } catch {
+      folderDeleted = false;
+      showToast('No se pudo eliminar el archivo de la carpeta');
     }
-  );
+  }
+  const localPoems = readLocalPoems().filter(poem => poem.id != id);
+  const localDeleted = writeLocalPoems(localPoems);
+  renderSidebar();
+  return folderDeleted && localDeleted;
 }
-function closeRenameModal() { closeVbModal(); }
-function confirmRename() {}
-function deleteSelectedFile() {
-  if (!selectedFileId) return;
-  const poem = getSavedPoems().find(p=>p.id==selectedFileId);
-  if (!poem) return;
-  openVbModal(
-    `<h2 style="margin-bottom:8px">Eliminar poema</h2>
-     <p style="color:var(--ink50);margin-bottom:20px">¿Eliminar "${escHtml(poem.name)}"?</p>
-     <div class="modal-actions"><button data-cancel>Cancelar</button><button data-ok style="background:var(--rust);color:#fff;border-color:var(--rust)">Eliminar</button></div>`,
-    () => {
-      deletePoemFromStorage(selectedFileId);
-      selectedFileId = null;
-      return true;
-    }
-  );
-}
-function closeDeleteModal() { closeVbModal(); }
-function confirmDelete() {
-  showToast('Eliminado');
-}
+
 function loadPoem(id) {
   closeSidebar();
   const poem = getSavedPoems().find(p=>p.id==id);
   if (!poem) return;
   // Check if already open in a tab
   const existing = tabs.find(t=>t.poem && t.poem.id==id);
-  if (existing) { activateTab(existing.id); return; }
+  if (existing) {
+    if (!existing.dirty) {
+      existing.poem = poem;
+      existing.name = poem.name;
+      existing.text = poem.text;
+      const textarea = document.getElementById('ta-'+existing.id);
+      if (textarea) textarea.value = poem.text;
+      const verseCount = document.getElementById('vc-'+existing.id);
+      if (verseCount) verseCount.textContent = poem.text.split('\n').filter(line=>line.trim()).length;
+      renderTabsBar();
+    }
+    activateTab(existing.id);
+    return;
+  }
   // Open in new tab
   const tab = openNewTab(poem);
   createTabPanel(tab);
   activateTab(tab.id);
   showToast(`Cargado: ${poem.name}`);
 }
-
-function updateSaveButton() {} // no-op, button always says Guardar
 
 /* ── Modal system (Editorium style) ─────────────────────── */
 let _modalOnCancel = null;
@@ -1556,9 +1478,6 @@ function alertVbModal(msg) {
 }
 
 /* ── Save system ─────────────────────────────────────────── */
-function showSaveModal() { saveActiveTab(); }
-function closeModal() { closeVbModal(); }
-
 async function saveActiveTab() {
   const tab = getActiveTab();
   if (!tab) return;
@@ -1621,6 +1540,7 @@ async function writePoemToStorage(tab, name, text) {
       await wr.close();
       // Update tab
       const poem = {id: filename, name, text, date: new Date().toISOString(), fromFolder:true};
+      upsertLocalBackup(poem, tab.poem ? tab.poem.id : null);
       tab.name = name; tab.poem = poem; tab.dirty = false;
       renderTabsBar();
       await syncFolderPoems();
@@ -1633,7 +1553,7 @@ async function writePoemToStorage(tab, name, text) {
   }
 
   // localStorage fallback
-  const poems = getSavedPoems();
+  const poems = readLocalPoems();
   const isNewTarget = !tab.poem || tab.poem.name !== name;
   if (isNewTarget) {
     const exists = poems.find(p=>p.name.toLowerCase()===name.toLowerCase());
@@ -1644,14 +1564,14 @@ async function writePoemToStorage(tab, name, text) {
   if (tab.poem && tab.poem.name === name) {
     // Overwrite same poem
     const updated = poems.map(p=>p.id==tab.poem.id?{...p,text,date:now}:p);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    if (!writeLocalPoems(updated)) return 'error';
     poem = {...tab.poem, text, date:now};
   } else {
     // New poem
     poem = {id:Date.now(), name, text, date:now};
     poems.unshift(poem);
     if (poems.length>50) poems.pop();
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(poems));
+    if (!writeLocalPoems(poems)) return 'error';
   }
   tab.name = name; tab.poem = poem; tab.dirty = false;
   renderTabsBar();
@@ -1695,31 +1615,6 @@ function cleanPoemText(text) {
 }
 
 
-/* ── Copy poem ──────────────────────────────────────────── */
-function copyPoem() {
-  const tab = getActiveTab();
-  const ta = tab ? document.getElementById('ta-'+tab.id) : null;
-  const text = ta ? ta.value.trim() : '';
-  if (!text) { showToast('No hay texto para copiar'); return; }
-  navigator.clipboard.writeText(text).then(() => {
-    showToast('✓ Copiado al portapapeles');
-  }).catch(() => {
-    // Fallback
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    showToast('✓ Copiado al portapapeles');
-  });
-}
-
-/* ── Clear ──────────────────────────────────────────────── */
-function clearPoem() {
-  clearActiveTab();
-}
-
 /* ── Init ───────────────────────────────────────────────── */
 let _debounceTimer = null;
 
@@ -1758,47 +1653,6 @@ function closeSidebar() {
 window.addEventListener('resize', () => {
   if (window.innerWidth > 768) closeSidebar();
 });
-
-
-/* ── Export to iCloud (Web Share API) ──────────────────── */
-async function exportToICloud() {
-  const tab = getActiveTab();
-  const ta = tab ? document.getElementById('ta-'+tab.id) : null;
-  const text = ta ? ta.value.trim() : '';
-  const name = tab ? tab.name : 'poema';
-  if (!text) { showToast('No hay poema para exportar'); return; }
-
-  const blob = new Blob([text], {type: 'text/plain'});
-  const file = new File([blob], name.replace(/[\/:*?"<>|]/g,'-') + '.txt', {type: 'text/plain'});
-
-  // Try Web Share API first (iOS Safari → "Guardar en Archivos" → iCloud)
-  if (navigator.canShare && navigator.canShare({files: [file]})) {
-    try {
-      await navigator.share({
-        title: name,
-        text: 'Poema exportado desde Verbium',
-        files: [file]
-      });
-      showToast('Exportado. Elige iCloud Drive.');
-      return;
-    } catch (e) {
-      // User cancelled or share failed → fallback to download
-    }
-  }
-
-  // Fallback: trigger download
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = file.name;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  showToast('Descargado: ' + file.name);
-}
-
-
 
 
 window.onload = () => {
