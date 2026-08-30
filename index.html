@@ -63,6 +63,8 @@
   --shadow-sm:0 1px 3px rgba(31,35,40,.12); --shadow-lg:0 8px 24px rgba(140,149,159,.2);
   --th-bg:#1f2328; --radius:6px;
   --green:#1a7f37;
+  --type-title:.78rem; --type-label:.65rem; --type-body:.88rem;
+  --weight-title:700; --weight-body:500; --tracking-title:.1em;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden}
@@ -120,12 +122,12 @@ body{background:var(--bg3);color:var(--ink);font-family:Inter,-apple-system,Blin
 .results{display:none;flex:1 1 auto;min-height:0;overflow-y:scroll;overflow-x:hidden;scrollbar-gutter:stable;flex-direction:column;gap:8px;padding-right:2px}
 .results.is-visible{display:flex}
 .section-flush{padding:0}
-.section-heading{padding:16px 24px}
+.section-heading{padding:14px 20px}
 .section-content{padding:16px 24px}
 .results-table{background:var(--bg2);border:1px solid var(--border);width:100%;overflow:hidden}
 .syl-table-wrap{overflow-x:auto}
 .syl-table{width:100%;min-width:700px;border-collapse:collapse;font-size:14px;table-layout:fixed}
-h2{color:var(--rust);font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.16em;margin:0 0 16px;display:block}
+h2{color:var(--ink);font-size:var(--type-title);font-weight:var(--weight-title);text-transform:uppercase;letter-spacing:var(--tracking-title);line-height:1.35;margin:0 0 14px;display:block}
 textarea{width:100%;height:160px;min-height:160px;resize:none;background:var(--bg2);border:1px solid var(--border);padding:16px;color:var(--ink);font:inherit;font-size:.95rem;line-height:1.6;outline:none}
 textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-lt)}
 .actions{display:flex;flex-wrap:wrap;gap:8px;padding-top:12px}
@@ -141,11 +143,11 @@ button:disabled{opacity:.4;cursor:not-allowed}
 .btn-save:hover{background:#ea580c;border-color:#ea580c}
 .btn-save:active{background:#c2410c;border-color:#c2410c;transform:scale(.98)}
 /* Metrics grid */
-.metrics-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:12px}
+.metrics-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .metric-card{background:rgba(255,255,255,.92);box-shadow:var(--shadow-sm);padding:14px}
 .metric-card:nth-child(even){background:rgba(240,236,228,.65)}
-.metric-label{color:var(--ink50);font-size:.58rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
-.metric-value{margin-top:6px;color:var(--gold);font-size:1rem;font-weight:600;line-height:1.1}
+.metric-label{color:var(--ink50);font-size:var(--type-label);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.metric-value{margin-top:6px;color:var(--gold);font-size:1rem;font-weight:700;line-height:1.25}
 
 /* Bars */
 .bars-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
@@ -160,8 +162,40 @@ button:disabled{opacity:.4;cursor:not-allowed}
 
 table{width:100%;min-width:980px;table-layout:fixed;border-collapse:separate;border-spacing:0;text-align:left;font-size:14px}
 .td-divided{word-break:break-word;white-space:normal;max-width:380px}
-.syl-line{white-space:normal;line-height:1.8}
-thead th{background:var(--th-bg);color:var(--bg);border:0;padding:12px 16px;font-size:.68rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase}
+.syl-line{display:flex;flex-wrap:wrap;align-items:stretch;gap:6px;white-space:normal;line-height:1.25}
+.syl-readable{width:100%;margin-bottom:4px;color:var(--ink);font-size:.92rem;font-weight:700;line-height:1.6;overflow-wrap:anywhere}
+.syl-cell{display:inline-grid;grid-template-rows:auto auto;min-width:42px;border:1px solid var(--border);background:var(--bg2);text-align:center;overflow:hidden}
+.syl-cell.is-tonic{border-color:var(--gold);box-shadow:inset 0 -3px 0 var(--gold)}
+.syl-index{padding:2px 6px;background:var(--bg);color:var(--ink50);font-size:.55rem;font-weight:700;letter-spacing:.06em}
+.syl-text{padding:6px 8px;color:var(--ink);font-size:.88rem;font-weight:600}
+.syl-cell.is-tonic .syl-text{color:var(--rust)}
+.syl-cesura{display:inline-flex;align-items:center;color:var(--rust);font-size:1.35rem;font-weight:700;padding:0 2px}
+.syl-legend{width:100%;margin-top:2px;color:var(--ink50);font-size:.58rem;letter-spacing:.02em}
+.rhyme-summary{margin:0 16px 16px;padding:14px 16px;border-left:3px solid var(--rust);background:var(--rust-lt);display:grid;grid-template-columns:auto 1fr;align-items:center;gap:8px 16px}
+.rhyme-summary-label{color:var(--ink50);font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.rhyme-summary-pattern{color:var(--rust);font-size:1.15rem;font-weight:800;letter-spacing:.16em;overflow-wrap:anywhere}
+.rhyme-summary-note{grid-column:1/-1;color:var(--ink50);font-size:.68rem}
+.scan-primary{background:var(--bg2);border:0;padding:18px 20px}
+.scan-primary h2{margin:0 0 14px}
+.scan-primary-pattern{margin-bottom:12px;padding:9px 12px;background:rgba(28,26,22,.035);color:var(--ink50);font-size:var(--type-body);font-weight:600;letter-spacing:.04em;line-height:1.45}
+.scan-primary-list{display:grid;gap:10px}
+.scan-primary-head,.scan-primary-row{display:grid;grid-template-columns:minmax(280px,3fr) 72px minmax(115px,.8fr);gap:12px;align-items:center}
+.scan-primary-head{padding:9px 12px;background:var(--th-bg);color:var(--bg);font-size:var(--type-label);font-weight:700;letter-spacing:.08em;text-transform:uppercase;line-height:1.35}
+.scan-primary-row{padding:12px;border:1px solid rgba(28,26,22,.08);background:rgba(28,26,22,.018)}
+.scan-primary-division{color:var(--ink50);font-size:var(--type-body);font-weight:var(--weight-body);line-height:1.65;overflow-wrap:anywhere}
+.scan-primary-count{color:var(--gold);font-size:var(--type-body);font-weight:700;text-align:center}
+.scan-primary-rhyme{color:var(--rust);font-size:var(--type-body);font-weight:700;text-align:center}
+.scan-primary-policy{grid-column:1/-1;color:var(--ink50);font-size:var(--type-label);font-weight:500;line-height:1.4}
+@media(max-width:768px){
+  .scan-primary-head{display:none}
+  .scan-primary-row{grid-template-columns:1fr 1fr;gap:8px}
+  .scan-primary-division{grid-column:1/-1}
+  .scan-primary-division::before{content:'División: ';color:var(--ink50);font-size:.65rem;font-weight:700;text-transform:uppercase}
+  .scan-primary-count::before{content:'Sílabas: ';color:var(--ink50);font-size:.62rem}
+  .scan-primary-rhyme::before{content:'Patrón de rima: ';color:var(--ink50);font-size:.62rem}
+  .scan-primary-policy{grid-column:1/-1}
+}
+thead th{background:var(--th-bg);color:var(--bg);border:0;padding:12px 16px;font-size:var(--type-label);font-weight:700;letter-spacing:.08em;text-transform:uppercase;line-height:1.35}
 tbody td{border:0;padding:16px;vertical-align:top}
 tbody tr{background:rgba(255,255,255,.92)}
 tbody tr:nth-child(even){background:rgba(240,236,228,.55)}
@@ -376,7 +410,7 @@ tbody tr:hover{background:var(--rust-lt)}
 
   <!-- Footer -->
   <footer class="footer" style="flex-shrink:0">
-    <span>© 2026 Verbium v25.5. Todos los derechos reservados.</span>
+    <span>© 2026 Verbium v27.3. Todos los derechos reservados.</span>
     <span id="footer-folder" style="display:none;color:var(--gold);font-weight:500">📁 <span id="footer-folder-name"></span></span>
     <div class="footer-right">
       <span style="font-family:'Georgia',serif;line-height:1.3;text-align:center;display:inline-block">
@@ -482,28 +516,37 @@ function createTabPanel(tab) {
       </div>
     </div>
     <section id="results-${tab.id}" class="results" aria-label="Resultados del análisis">
+      <div class="scan-primary" id="sv-${tab.id}">
+        <h2>División en sílabas y patrón de rimas</h2>
+        <div class="scan-primary-list"><div class="scan-primary-row"><span>Pulsa Analizar para ver la división.</span></div></div>
+      </div>
       <div class="box section-flush">
         <div class="section-heading"><h2 style="margin:0">Métricas Generales</h2></div>
         <div class="section-content"><div class="metrics-grid" id="mg-${tab.id}"></div></div>
       </div>
-      <div class="bars-box">
-        <h2>Distribución silábica</h2>
-        <div class="bars" id="bc-${tab.id}"></div>
-      </div>
       <div class="results-table">
         <div class="section-heading"><h2 style="margin:0">División Silábica</h2></div>
+        <div class="rhyme-summary" aria-live="polite">
+          <span class="rhyme-summary-label">Patrón de rimas</span>
+          <strong class="rhyme-summary-pattern" id="rp-${tab.id}">—</strong>
+          <small class="rhyme-summary-note">La misma letra identifica versos que riman; — indica verso sin correspondencia.</small>
+        </div>
         <div class="syl-table-wrap">
           <table class="syl-table">
             <thead><tr>
-              <th style="width:3rem;padding:12px 16px;text-align:left;background:var(--th-bg);color:var(--bg);font-size:.68rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase">#</th>
-              <th style="width:32%;padding:12px 16px;text-align:left;background:var(--th-bg);color:var(--bg);font-size:.68rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase">Verso</th>
-              <th style="width:38%;padding:12px 16px;text-align:left;background:var(--th-bg);color:var(--bg);font-size:.68rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase">División silábica</th>
-              <th style="width:5rem;padding:12px 16px;text-align:left;background:var(--th-bg);color:var(--bg);font-size:.68rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase">Sílabas</th>
-              <th style="width:4rem;padding:12px 16px;text-align:left;background:var(--th-bg);color:var(--bg);font-size:.68rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase">Rima</th>
+              <th style="width:3rem">#</th>
+              <th style="width:32%">Verso</th>
+              <th style="width:38%">División silábica</th>
+              <th style="width:5rem">Sílabas</th>
+              <th style="width:4rem">Rima</th>
             </tr></thead>
             <tbody id="rb-${tab.id}"></tbody>
           </table>
         </div>
+      </div>
+      <div class="bars-box">
+        <h2>Gráfico de medida por verso</h2>
+        <div class="bars" id="bc-${tab.id}"></div>
       </div>
     </section>`;
 
@@ -706,16 +749,107 @@ const CONTRACTIONS = new Map([
   ["pa'cá",["para","acá"]],["pa'ca",["para","aca"]]
 ]);
 
-const UI_HIATO = new Set([
-  'destruír','construír','incluír','excluír','fluír','huír',
-  'aún','raúl','baúl'
-]);
-
 const COMMON_WORDS = new Set(['mi','si','vi','li','xi','ci','di','la','lo','le','se','me','te','de','el','al','un','en','es','su','tu']);
-const STRESS_ADJ   = {aguda:1,llana:0,esdrujula:-1};
-const STRESS_SIGN  = {aguda:'+', llana:'', esdrujula:'−'};
-const STRESS_COLOR = {aguda:'var(--rust)',llana:'var(--ink50)',esdrujula:'var(--gold)'};
+const STRESS_ADJ   = {aguda:1,llana:0,esdrujula:-1,mente:0};
+const STRESS_SIGN  = {aguda:'+', llana:'', esdrujula:'−',mente:''};
+const STRESS_COLOR = {aguda:'var(--rust)',llana:'var(--ink50)',esdrujula:'var(--gold)',mente:'var(--ink50)'};
 const LETTERS      = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+/* Registro auditable: fuente única de las reglas de acentuación vigentes. */
+const ACCENT_RULES = Object.freeze({
+  version:'2026.08-pack-18',
+  source:'Jerarquía tipográfica uniforme y presentación silábica para Verbium v27.3',
+  rules:Object.freeze([
+    {id:'AC-01',scope:'prosodia',rule:'En una polisílaba ordinaria, la tilde marca una sílaba tónica; no agota los acentos secundarios de compuestos ni el doble acento de -mente.'},
+    {id:'AC-02',scope:'regla general',rule:'Una polisílaba correctamente escrita y sin tilde, acabada en vocal, n o s, se interpreta como llana.'},
+    {id:'AC-03',scope:'excepción',rule:'En consonante+n/s la grafía no permite asumir lectura llana; sin lexicón se propone lectura aguda con confianza media, no categórica.'},
+    {id:'AC-04',scope:'regla general',rule:'Otra terminación propone lectura aguda; la confianza solo es alta con entrada léxica o marca ortográfica y baja en formas no normativas.'},
+    {id:'AC-05',scope:'hiato',rule:'Son hiatos dos abiertas, dos vocales iguales y cerrada tónica con abierta; la h intercalada no impide el contacto.'},
+    {id:'AC-06',scope:'diptongo',rule:'Ui e iu forman normalmente diptongo ortográfico; la diéresis poética explícita se registra sin alterar la estructura léxica y se separa de güe/güi.'},
+    {id:'AC-07A',scope:'ortografía',rule:'La tilde diacrítica distingue determinados homógrafos, pero no define por sí sola el ajuste métrico.'},
+    {id:'AC-07B',scope:'interrogativos',rule:'Los interrogativos con tilde son tónicos; los relativos sin tilde generan una hipótesis, excepto que es átono fuerte y el cual/cuales es tónico.'},
+    {id:'AC-07C',scope:'tilde opcional',rule:'Solo y los demostrativos se escriben normalmente sin tilde; el motor no usa una tilde opcional para inferir función sin contexto.'},
+    {id:'AC-08',scope:'-mente',rule:'Los adverbios en -mente conservan el acento de la base y otro en men; el ajuste final se calcula desde el último acento efectivo y se registra como FINAL_MENTE.'},
+    {id:'AC-09',scope:'ritmo',rule:'Por defecto, una palabra átona no aporta acento léxico; el énfasis expresivo o musical pertenece a una capa opcional no automatizada.'},
+    {id:'AC-10',scope:'mayúsculas',rule:'Las vocales tildadas conservan su valor en mayúsculas y minúsculas.'},
+    {id:'HOM-01',scope:'homógrafos',rule:'Las formas de tonicidad dependiente de categoría producen estado ambiguo y confianza baja cuando el contexto no basta.'},
+    {id:'MET-FIN-04',scope:'final métrico',rule:'En modo tradicional, todo monosílabo final recibe +1 con causa FINAL_MONOSILABO, separado de la tilde diacrítica.'},
+    {id:'MET-01',scope:'sinalefa',rule:'Cada posición fusionada conserva fuentes, núcleos tónicos, multiplicidad, posible choque y confianza.'},
+    {id:'MET-02',scope:'política de sinalefa',rule:'La sinalefa se propone entre vocales adyacentes, se bloquea ante pausa fuerte y registra alternativas ante pausa débil o choque tónico.'},
+    {id:'MET-03',scope:'selección automática',rule:'El motor compara lecturas normativa y conservadora, pondera confianza, ambigüedades, medida y apoyos estructurales, y conserva la lectura no elegida como alternativa cuando cambia el cómputo.'},
+    {id:'MET-COMP-01',scope:'verso compuesto',rule:'El alejandrino se valida como dos hemistiquios independientes de 7 sílabas, cada uno con su ajuste final y sin sinalefa a través de la cesura.'},
+    {id:'RIT-01',scope:'ritmo',rule:'Primero se determina la medida; una etiqueta es confirmada, probable o posible según la confianza de todos sus apoyos obligatorios.'},
+    {id:'RIT-END',scope:'endecasílabo',rule:'Solo con medida 11 y acento estructural obligatorio en 10 se puntúan patrones heroico 2-6-10, melódico 3-6-10, sáfico 4-8-10 y enfático 1-6-10.'},
+    {id:'RIT-OCT',scope:'octosílabo',rule:'Solo con medida 8 se puntúan trocaico, dactílico, mixto A 2-4-7 y mixto B 2-5-7; sin coincidencia se muestran apoyos.'}
+  ])
+});
+
+const ATONIC_CONJUNCTIONS = new Set(['y','e','ni','o','u','pero','mas','sino','que']);
+const ATONIC_ARTICLES = new Set(['el','la','lo','los','las']);
+const ATONIC_CLITICS = new Set(['me','te','se','lo','la','los','las','le','les','nos','os']);
+const ATONIC_PREPOSITIONS = new Set(['a','ante','bajo','cabe','con','de','desde','en','entre','hacia','hasta','para','por','sin','so','sobre','tras']);
+const CONTEXTUAL_PREPOSITIONS = new Set(['contra','durante','mediante']);
+const CONTEXTUAL_POSSESSIVES = new Set(['mi','mis','tu','tus','su','sus','nuestro','nuestra','nuestros','nuestras','vuestro','vuestra','vuestros','vuestras']);
+const CONTEXTUAL_INDEFINITES = new Set(['un','una','unos','unas']);
+const CONTEXTUAL_RELATIVES = new Set(['que','quien','quienes','como','cuando','donde','adonde','cuanto','cuanta','cuantos','cuantas','cual','cuales']);
+const TONIC_FUNCTION_WORDS = new Set(['según','vía','versus']);
+const PREPOSITION_HOMOGRAPHS = new Set(['bajo','entre','sobre']);
+const SUBJECT_PRONOUNS = new Set(['yo','tú','él','ella','usted','nosotros','nosotras','vosotros','vosotras','ellos','ellas','ustedes']);
+const MENTE_NON_ADVERBS = new Set(['mente','demente','clemente','inclemente','vehemente']);
+const LEXICAL_STRESS = new Map([['robots',1],['tictacs',1],['zigzags',1],['bíceps',0],['cómics',0],['fórceps',0]]);
+const SYLLABLE_LEXICON = new Map([['truhan',['truhan']]]);
+const METRIC_OPTIONS = {mode:'tradicional',sinalefaPolicy:'automatica'};
+const PROSODIC_EMPHASIS = new Set();
+
+function setProsodicEmphasis(words=[]) {
+  PROSODIC_EMPHASIS.clear();
+  words.map(word=>String(word).toLowerCase()).forEach(word=>PROSODIC_EMPHASIS.add(word));
+}
+function setMetricOptions(options={}) {
+  if (['tradicional'].includes(options.mode)) METRIC_OPTIONS.mode=options.mode;
+  if (options.sinalefaPolicy==='automatica') METRIC_OPTIONS.sinalefaPolicy='automatica';
+  return {...METRIC_OPTIONS};
+}
+window.setProsodicEmphasis=setProsodicEmphasis;
+window.setMetricOptions=setMetricOptions;
+
+function getAccentuationRulesReport() {
+  return {
+    generatedAt:new Date().toISOString(),
+    packVersion:ACCENT_RULES.version,
+    source:ACCENT_RULES.source,
+    rules:ACCENT_RULES.rules.map(rule=>({...rule})),
+    atonicInventory:{
+      conjunctions:[...ATONIC_CONJUNCTIONS].sort((a,b)=>a.localeCompare(b,'es')),
+      defaultPrepositions:[...ATONIC_PREPOSITIONS].sort((a,b)=>a.localeCompare(b,'es')),
+      articles:[...ATONIC_ARTICLES].sort((a,b)=>a.localeCompare(b,'es')),
+      clitics:[...ATONIC_CLITICS].sort((a,b)=>a.localeCompare(b,'es')),
+      contextualPrepositions:[...CONTEXTUAL_PREPOSITIONS].sort((a,b)=>a.localeCompare(b,'es')),
+      contextualPossessives:[...CONTEXTUAL_POSSESSIVES].sort((a,b)=>a.localeCompare(b,'es')),
+      contextualIndefinites:[...CONTEXTUAL_INDEFINITES].sort((a,b)=>a.localeCompare(b,'es')),
+      contextualRelatives:[...CONTEXTUAL_RELATIVES].sort((a,b)=>a.localeCompare(b,'es')),
+      tonicExceptions:[...TONIC_FUNCTION_WORDS].sort((a,b)=>a.localeCompare(b,'es'))
+    },
+    confidenceLevels:{alto:'Regla ortográfica, léxica o funcional resuelta',medio:'Inferencia contextual probable',bajo:'Ambigüedad no resuelta',requiere_desambiguacion:'Revisión sintáctica o manual necesaria'},
+    metricOptions:{...METRIC_OPTIONS},
+    declaredEmphasis:[...PROSODIC_EMPHASIS],
+    lexicalStressEntries:Object.fromEntries(LEXICAL_STRESS),
+    syllableEntries:Object.fromEntries(SYLLABLE_LEXICON),
+    rhythmPatterns:{
+      endecasilabo:{heroico:{required:[2,6,10],optional:[4,8]},melodico:{required:[3,6,10],optional:[5]},safico:{required:[4,8,10],optional:[6]},enfatico:{required:[1,6,10],optional:[4]}},
+      octosilabo:{trocaico:{required:[3,7],optional:[1,5]},dactilico:{required:[1,4,7],optional:[2,5]},mixtoA:{required:[2,4,7],optional:[6]},mixtoB:{required:[2,5,7],optional:[3]}}
+    },
+    limitations:[
+      'El etiquetado contextual usa heurísticas conservadoras; no sustituye un analizador morfosintáctico completo.',
+      'Los extranjerismos no adaptados no pueden resolverse con reglas ortográficas españolas.',
+      'Los nombres propios de pronunciación no deducible requieren información léxica.',
+      'El énfasis expresivo, contrastivo o musical solo se aplica cuando el usuario lo declara.',
+      'La validación morfológica de -mente usa exclusiones y estructura productiva, no un diccionario exhaustivo.',
+      'Las alternativas de sinalefa se registran, pero la interfaz todavía muestra una medida principal en vez de enumerar todas las escansiones.'
+    ]
+  };
+}
+window.getAccentuationRulesReport = getAccentuationRulesReport;
 
 /* ── Helpers ────────────────────────────────────────────── */
 const isVowel  = ch => !!ch && VOWELS.has(ch);
@@ -751,13 +885,39 @@ function isNumber(word) {
   }
   return false;
 }
+function romanToInteger(roman) {
+  const values={I:1,V:5,X:10,L:50,C:100,D:500,M:1000};
+  let total=0;
+  for(let i=0;i<roman.length;i++) total+=(values[roman[i]]||0)<(values[roman[i+1]]||0)?-values[roman[i]]:values[roman[i]];
+  return total;
+}
+function integerToSpanish(value) {
+  const units=['cero','uno','dos','tres','cuatro','cinco','seis','siete','ocho','nueve','diez','once','doce','trece','catorce','quince','dieciséis','diecisiete','dieciocho','diecinueve','veinte','veintiuno','veintidós','veintitrés','veinticuatro','veinticinco','veintiséis','veintisiete','veintiocho','veintinueve'];
+  const tens=['','','treinta','cuarenta','cincuenta','sesenta','setenta','ochenta','noventa'];
+  const hundreds=['','ciento','doscientos','trescientos','cuatrocientos','quinientos','seiscientos','setecientos','ochocientos','novecientos'];
+  if(value<30) return units[value];
+  if(value<100) return tens[Math.floor(value/10)]+(value%10?' y '+units[value%10]:'');
+  if(value===100) return 'cien';
+  if(value<1000) return hundreds[Math.floor(value/100)]+(value%100?' '+integerToSpanish(value%100):'');
+  if(value<1000000) {
+    const thousands=Math.floor(value/1000),rest=value%1000;
+    return (thousands===1?'mil':integerToSpanish(thousands)+' mil')+(rest?' '+integerToSpanish(rest):'');
+  }
+  return null;
+}
+function spokenNumberWords(word) {
+  const c=word.replace(STRIP_PUNCT,'').trim();
+  const value=/^\d+$/.test(c)?Number(c):romanToInteger(c.toUpperCase());
+  if(!Number.isSafeInteger(value)||value<0||value>=1000000) return null;
+  const spoken=integerToSpanish(value);
+  return spoken?spoken.split(/\s+/).filter(Boolean):null;
+}
 const numberToSyls = word => {
-  const c = word.replace(STRIP_PUNCT,'').trim();
-  return [/^[IVXLCDMivxlcdm]+$/.test(c) ? c.toUpperCase() : c];
+  const words=spokenNumberWords(word);
+  return words?words.flatMap(item=>syllabifyCached(item)):[word.replace(STRIP_PUNCT,'').trim()];
 };
-const isYFinal     = word => { const c = word.replace(STRIP_PUNCT,'').toLowerCase().trim(); return c.length > 1 && c.length <= 4 && c !== 'muy' && /[aeiou][y]$/i.test(c) && !c.includes('ü'); };
+const isYFinal     = word => { const c=word.replace(STRIP_PUNCT,'').toLowerCase().trim(); return c.length>1&&/[aeiouáéíóúü]y$/i.test(c); };
 const treatAsVowelY= word => { const c = word.replace(STRIP_PUNCT,'').toLowerCase().trim(); return c === 'y' || c === 'é' || isYFinal(word); };
-const treatYAsVowel= s    => { const c = s.toLowerCase().trim(); if (c === 'muy') return s; return (s.length >= 2 && /[aeiouáéíóúüŵẅ]y$/i.test(s)) ? s.slice(0,-1)+'i' : s; };
 
 /* ── Diphthong check ────────────────────────────────────── */
 function isDiphthong(v1, v2, wordClean, nextChar) {
@@ -767,10 +927,14 @@ function isDiphthong(v1, v2, wordClean, nextChar) {
   if (v1 === 'ŵ') return true;
   // RAE rule: two identical vowels = always hiato (antiinflamatorio, coordinación)
   if (v1 === v2) return false;
+  // Dos cerradas forman diptongo ortográfico incluso si la segunda recibe
+  // la tilde exigida por la palabra: cuí-da-te, ben-juí, in-ter-viú.
+  const closed = ch => /[iuüíú]/.test(ch);
+  if (closed(v1) && closed(v2)) return true;
   if (WEAK_ACCENT.has(v1) || WEAK_ACCENT.has(v2)) return false;
   if (isStrong(v1) && isStrong(v2)) return false;
   if (nextChar === 'h') return true;
-  if (isWeak(v1) && isWeak(v2)) return wordClean ? !UI_HIATO.has(wordClean) : true;
+  if (isWeak(v1) && isWeak(v2)) return true;
   return (isWeak(v1) && isStrong(v2)) || (isStrong(v1) && isWeak(v2));
 }
 
@@ -778,10 +942,10 @@ function isDiphthong(v1, v2, wordClean, nextChar) {
 function syllabify(word) {
   let clean = word.replace(STRIP_PUNCT,'').toLowerCase().trim();
   if (!clean) return [];
+  if (SYLLABLE_LEXICON.has(clean)) return [...SYLLABLE_LEXICON.get(clean)];
   const expanded = expandContraction(clean);
   if (expanded)          return expanded;
   if (isNumber(clean))   return numberToSyls(clean);
-  if (isYFinal(clean))   return [clean];
   const wordClean = clean.replace(/[ŵẅ]/g,'u').replace(/ü/g,'u');
   clean = clean.replace(/qu([eéiíoóuúaá])/g,'qŵ$1').replace(/gu([eéiíoóuúaá])/g,'gŵ$1').replace(/gü/g,'gẅ');
   const L = [...clean], N = L.length;
@@ -821,45 +985,161 @@ function syllabify(word) {
   return (syls.length ? syls : [clean]).map(s => {
     const isTriphthong = s.includes('ẅ');
     const restored = s.replace(/ŵ/g,'u').replace(/ẅ/g,'ü');
-    return isTriphthong ? restored : treatYAsVowel(restored);
+    return restored;
   });
 }
 
 /* ── Tonic index ────────────────────────────────────────── */
-function tonicIndex(word) {
-  const clean = word.replace(STRIP_PUNCT,'').toLowerCase().trim();
-  if (!clean || isNumber(clean) || isYFinal(clean)) return 0;
-  const syls = syllabifyCached(clean), n = syls.length;
-  if (!n) return 0;
-  for (let i = 0; i < n; i++) if (/[áéíóú]/.test(syls[i])) return i;
-  if (n === 1) return 0;
-  return /[aeioun s]/.test(clean[clean.length-1]) ? n-2 : n-1;
+function defaultStressIndex(clean, syllableCount) {
+  if (syllableCount <= 1) return 0;
+  const last = clean.slice(-1);
+  const previous = clean.slice(-2,-1);
+  const consonantBeforeNS = /[ns]/.test(last) && previous && !/[aeiouáéíóúü]/.test(previous);
+  return /[aeiouáéíóúüns]/.test(last) && !consonantBeforeNS ? syllableCount-2 : syllableCount-1;
 }
-function buildMetricTonicMap(wordSyllables, sylData) {
-  const gramTonic = [];
-  for (const {word,syllables} of wordSyllables) {
-    const ti = tonicIndex(word);
-    syllables.forEach((_,i) => gramTonic.push(i === ti));
+
+function resolveTonicity(clean, context=null) {
+  const words=context?.words || [];
+  const index=Number.isInteger(context?.index) ? context.index : -1;
+  const normalize=value=>(value||'').replace(STRIP_PUNCT,'').toLowerCase();
+  const previous=index>0 ? normalize(words[index-1]) : '';
+  const next=index>=0&&index<words.length-1 ? normalize(words[index+1]) : '';
+  const decision=(atonic,confidence,status,reason)=>({atonic,confidence,status,reason});
+  if (!clean) return decision(false,'bajo','requiere_desambiguacion','Forma vacía');
+  if (PROSODIC_EMPHASIS.has(clean)) return decision(false,'alto','resuelta','Énfasis prosódico declarado por el usuario');
+  if (/[áéíóú]/.test(clean)) return decision(false,'alto','resuelta','Tilde escrita');
+  if (TONIC_FUNCTION_WORDS.has(clean)) return decision(false,'alto','resuelta','Excepción funcional tónica');
+  if (ATONIC_ARTICLES.has(clean)) return decision(true,'alto','resuelta','Artículo');
+  if (ATONIC_CLITICS.has(clean)) return decision(true,'alto','resuelta','Pronombre clítico');
+  if (clean==='si') {
+    if (ATONIC_ARTICLES.has(previous)||previous==='nota') return decision(false,'alto','resuelta','Nombre de nota musical');
+    return decision(false,'bajo','requiere_desambiguacion','Conjunción condicional o nota musical');
   }
-  const metricTonic = [];
-  let gi = 0;
-  while (gi < sylData.length) {
-    if (sylData[gi].sinalefa && gi+1 < sylData.length) {
-      metricTonic.push(gramTonic[gi] || gramTonic[gi+1]);
-      gi += 2;
-    } else {
-      metricTonic.push(gramTonic[gi]);
-      gi++;
+  if ((clean==='cual'||clean==='cuales')&&ATONIC_ARTICLES.has(previous))
+    return decision(false,'alto','resuelta','Relativo cual/cuales precedido de artículo');
+  if (CONTEXTUAL_RELATIVES.has(clean)) {
+    if (clean==='que') return decision(true,'alto','resuelta','Relativo o conjunción que');
+    if (clean==='como'&&SUBJECT_PRONOUNS.has(previous)) return decision(false,'medio','resuelta','Posible forma verbal');
+    if (ATONIC_ARTICLES.has(previous)) return decision(false,'bajo','requiere_desambiguacion','Posible sustantivación');
+    return decision(false,'bajo','requiere_desambiguacion','Relativo sin tilde de tonicidad dependiente de construcción');
+  }
+  if (CONTEXTUAL_POSSESSIVES.has(clean)) {
+    if (!next||ATONIC_ARTICLES.has(previous)||previous==='nota') return decision(false,'medio','resuelta','Uso pospuesto, pronominal o nominal probable');
+    return decision(false,'bajo','requiere_desambiguacion','Posesivo determinante o uso tónico');
+  }
+  if (CONTEXTUAL_INDEFINITES.has(clean)) {
+    if (!next) return decision(false,'medio','resuelta','Uso pronominal o numeral probable');
+    return decision(false,'bajo','requiere_desambiguacion','Determinante o pronombre indefinido');
+  }
+  if (CONTEXTUAL_PREPOSITIONS.has(clean))
+    return decision(false,'medio','resuelta','Preposición con tonicidad propia probable');
+  if (PREPOSITION_HOMOGRAPHS.has(clean)) {
+    if (SUBJECT_PRONOUNS.has(previous)||ATONIC_ARTICLES.has(previous)||previous==='no')
+      return decision(false,'medio','resuelta','Uso verbal, nominal o adjetival probable');
+    return next?decision(true,'medio','resuelta','Uso preposicional probable'):
+      decision(false,'bajo','requiere_desambiguacion','Homógrafo preposicional o léxico');
+  }
+  if (ATONIC_PREPOSITIONS.has(clean)) return decision(true,'alto','resuelta','Preposición átona por defecto');
+  if (ATONIC_CONJUNCTIONS.has(clean)) return decision(true,'alto','resuelta','Conjunción o nexo átono por defecto');
+  return decision(false,'medio','resuelta','Inferencia ortográfica sin confirmación léxica');
+}
+
+function isMenteAdverb(clean) {
+  if (!clean.endsWith('mente')||MENTE_NON_ADVERBS.has(clean)||clean.length<=7) return false;
+  const base=clean.slice(0,-5);
+  return /[aeiouáéíóúü]/.test(base)&&syllabifyCached(base).length>0;
+}
+
+function numberTonicIndices(word) {
+  const words=spokenNumberWords(word);
+  if(!words) return [0];
+  const indices=[];
+  let offset=0;
+  for(const part of words) {
+    const syllables=syllabifyCached(part);
+    if(part!=='y') {
+      const written=syllables.findIndex(syllable=>/[áéíóú]/.test(syllable));
+      indices.push(offset+(written>=0?written:defaultStressIndex(part,syllables.length)));
     }
+    offset+=syllables.length;
   }
-  return metricTonic;
+  return indices;
+}
+
+function lexicalTonicData(word, context=null) {
+  const clean = word.replace(STRIP_PUNCT,'').toLowerCase().trim();
+  if (!clean) return {indices:[0],decision:{atonic:false,confidence:'bajo',status:'requiere_desambiguacion',reason:'Forma vacía'}};
+  if (isNumber(clean)) return {indices:numberTonicIndices(clean),decision:{atonic:false,confidence:spokenNumberWords(clean)?'medio':'bajo',status:spokenNumberWords(clean)?'resuelta':'requiere_desambiguacion',reason:'Lectura numérica inferida'}};
+  let decision=resolveTonicity(clean,context);
+  if (decision.atonic) return {indices:[],decision};
+  const syls = syllabifyCached(clean), n = syls.length;
+  if (!n) return {indices:[0],decision};
+  if (LEXICAL_STRESS.has(clean)) return {indices:[LEXICAL_STRESS.get(clean)],decision:{...decision,confidence:'alto',reason:'Entrada léxica'}};
+  if (isMenteAdverb(clean) && n >= 2) {
+    const base = clean.slice(0,-5);
+    const baseSyls = syllabifyCached(base);
+    const baseWritten = baseSyls.findIndex(s=>/[áéíóú]/.test(s));
+    const baseStress = baseWritten >= 0 ? baseWritten : defaultStressIndex(base,baseSyls.length);
+    return {indices:[...new Set([baseStress,n-2])].filter(i=>i>=0&&i<n),decision:{...decision,confidence:'medio',reason:'Adverbio en -mente inferido morfológicamente'}};
+  }
+  const written = syls.findIndex(s=>/[áéíóú]/.test(s));
+  return {indices:[written>=0?written:defaultStressIndex(clean,n)],decision};
+}
+
+function lexicalTonicIndices(word,context=null) {
+  return lexicalTonicData(word,context).indices;
+}
+
+function tonicIndex(word) {
+  const indices = lexicalTonicIndices(word);
+  return indices.length ? indices[indices.length-1] : -1;
+}
+function buildMetricTonicData(wordSyllables, sylData) {
+  const words=wordSyllables.map(item=>item.word);
+  const grammatical=[];
+  wordSyllables.forEach(({word,syllables},wordIndex) => {
+    const tonicData=lexicalTonicData(word,{words,index:wordIndex});
+    const tonicIndices=new Set(tonicData.indices);
+    syllables.forEach((text,syllableIndex)=>grammatical.push({
+      word,wordIndex,syllableIndex,text,tonic:tonicIndices.has(syllableIndex),
+      confidence:tonicData.decision.confidence,status:tonicData.decision.status,reason:tonicData.decision.reason
+    }));
+  });
+  const metricTonic=[];
+  const details=[];
+  const confidenceRank={alto:3,medio:2,bajo:1};
+  let gi=0,metricPosition=1;
+  while (gi<sylData.length) {
+    const linked=sylData[gi].sinalefa && gi+1<sylData.length;
+    const sources=linked ? [grammatical[gi],grammatical[gi+1]] : [grammatical[gi]];
+    metricTonic.push(sources.some(source=>source?.tonic));
+    const tonicSources=sources.filter(source=>source?.tonic);
+    const confidence=sources.reduce((lowest,source)=>
+      confidenceRank[source?.confidence]<confidenceRank[lowest]?source.confidence:lowest,'alto');
+    details.push({
+      position:metricPosition++,
+      linkType:linked?'sinalefa':'simple',
+      tonic:tonicSources.length>0,
+      tonicNucleiCount:tonicSources.length,
+      accentClash:tonicSources.length>1,
+      confidence,
+      sinalefaConfidence:sylData[gi].sinalefaConfidence||'alto',
+      sinalefaReason:sylData[gi].sinalefaReason||'no_aplica',
+      alternativeReading:!!sylData[gi].sinalefaAlternative,
+      requiresDisambiguation:sources.some(source=>source?.status==='requiere_desambiguacion'),
+      tonicSources:tonicSources.map(source=>({...source})),
+      sources:sources.filter(Boolean).map(source=>({...source}))
+    });
+    gi+=linked?2:1;
+  }
+  return {map:metricTonic,details};
 }
 
 /* ── Char helpers ───────────────────────────────────────── */
 function effectiveLastChar(syl) {
   let ch = stripVCY(syl).slice(-1).toLowerCase();
   const sylClean = syl.replace(STRIP_PUNCT,'').toLowerCase().trim();
-  if (ch==='y' && sylClean !== 'muy' && syl.length>1 && /[aeiouáéíóú]/.test(syl[syl.length-2])) ch='i';
+  if (ch==='y' && syl.length>1 && /[aeiouáéíóúü]/.test(syl[syl.length-2])) ch='i';
   return ch;
 }
 function effectiveFirstChar(syl, word) {
@@ -924,7 +1204,7 @@ function applyDieresis(syls) {
       const v1=chars[c].toLowerCase(), v2=chars[c+1].toLowerCase();
       const isGU = v1==='ü' && c>0 && chars[c-1].toLowerCase()==='g';
       if (isVowel(v1) && isVowel(v2) && isDiphthong(v1,v2,null,null)
-        && (WEAK_ACCENT.has(v1)||WEAK_ACCENT.has(v2)||v1==='ü'||v2==='ü')
+        && (v1==='ü'||v2==='ü')
         && !isGU) {
         split=c+1; break;
       }
@@ -936,12 +1216,14 @@ function applyDieresis(syls) {
 }
 function applySinalefa(wordSyllables) {
   const result=[], n=wordSyllables.length;
+  const words=wordSyllables.map(item=>item.word);
   for (let w=0; w<n; w++) {
     const {word,syllables,blockSinalefa,isNumber:isNum,isContraction}=wordSyllables[w];
     const m=syllables.length;
     for (let s=0; s<m; s++) {
       const isLast=s===m-1, isLastWord=w===n-1;
-      let sinalefa=false, hiato=false, divisionHyphen=false, hiatoMetrico=false;
+      let sinalefa=false,hiato=false,divisionHyphen=false,hiatoMetrico=false;
+      let sinalefaAlternative=false,sinalefaConfidence='alto',sinalefaReason='no_aplica';
       if (isLast && !isLastWord) {
         const next=wordSyllables[w+1];
         if (blockSinalefa||isNum||isContraction) {
@@ -956,13 +1238,31 @@ function applySinalefa(wordSyllables) {
             if (isVowel(fc)) sinalefa=true;
           }
         }
+        if (sinalefa) {
+          const strongPause=/[.;:!?]$/.test(word);
+          const weakPause=/[,]$/.test(word);
+          const leftTonic=lexicalTonicIndices(word,{words,index:w}).includes(s);
+          const rightTonic=lexicalTonicIndices(next.word,{words,index:w+1}).includes(0);
+          const tonicCollision=leftTonic&&rightTonic;
+          sinalefaAlternative=weakPause||tonicCollision;
+          sinalefaConfidence=sinalefaAlternative?'medio':'alto';
+          sinalefaReason=tonicCollision?'choque_tonico':weakPause?'pausa_debil':'adyacencia_vocalica';
+          if (strongPause||(METRIC_OPTIONS.sinalefaPolicy==='conservadora'&&sinalefaAlternative)) {
+            sinalefa=false;hiatoMetrico=true;
+            sinalefaAlternative=!strongPause;
+            sinalefaConfidence=strongPause?'alto':'medio';
+            sinalefaReason=strongPause?'pausa_fuerte':'dialefa_conservadora';
+          }
+        }
       }
       if (!isLast) {
         const te=stripVC(syllables[s]).slice(-1).toLowerCase();
         const ns=stripVC(syllables[s+1]).slice(0,1).toLowerCase();
         if (isVowel(te) && isVowel(ns) && !isDiphthong(te,ns,null,null)) hiato=true;
       }
-      result.push({text:syllables[s],sinalefa,hiato,hiatoMetrico,divisionHyphen,wordBreak:isLast&&!isLastWord,isNumber:isNum,isContraction});
+      result.push({text:syllables[s],sinalefa,hiato,hiatoMetrico,divisionHyphen,
+        sinalefaAlternative,sinalefaConfidence,sinalefaReason,
+        wordBreak:isLast&&!isLastWord,isNumber:isNum,isContraction});
     }
   }
   return result;
@@ -985,21 +1285,62 @@ function countPoetic(sylData) {
 function lastWordStress(word) {
   const clean=word.replace(STRIP_PUNCT,'').toLowerCase().trim();
   if (!clean || isNumber(clean)) return 'llana';
-  if (isYFinal(clean)) return 'aguda';
   const syls=syllabifyCached(clean), n=syls.length;
   if (n<=1) return 'aguda';
-  for (let i=0; i<n; i++) {
-    if (/[áéíóú]/.test(syls[i])) {
-      if (i===n-1) return 'aguda';
-      if (i===n-2) return 'llana';
-      return 'esdrujula';
-    }
+  if (isMenteAdverb(clean)) return 'mente';
+  const i=tonicIndex(clean);
+  if (i===n-1) return 'aguda';
+  if (i===n-2) return 'llana';
+  return 'esdrujula';
+}
+
+function getFinalAdjustment(word) {
+  const clean=word.replace(STRIP_PUNCT,'').toLowerCase().trim();
+  const syllables=syllabifyCached(clean);
+  if(isNumber(clean)) {
+    const words=spokenNumberWords(clean);
+    if(!words) return {classification:'desconocida',adjustment:0,cause:'FINAL_NUMERO_NO_RESUELTO',lastTonicIndex:0,confidence:'bajo'};
+    const lastWord=words.filter(item=>item!=='y').slice(-1)[0];
+    const lastClass=lastWordStress(lastWord);
+    const indices=numberTonicIndices(clean);
+    return {classification:lastClass,adjustment:STRESS_ADJ[lastClass],cause:'FINAL_NUMERO_INFERIDO',lastTonicIndex:indices[indices.length-1],confidence:'medio'};
   }
-  return /[aeioun s]/.test(clean.slice(-1)) ? 'llana' : 'aguda';
+  if (syllables.length<=1) return {classification:'aguda',adjustment:1,cause:'FINAL_MONOSILABO',lastTonicIndex:0,confidence:'alto'};
+  if (isMenteAdverb(clean)) {
+    const tonicData=lexicalTonicData(clean);
+    const indices=tonicData.indices;
+    const lastTonicIndex=indices.length?indices[indices.length-1]:syllables.length-2;
+    const distance=syllables.length-1-lastTonicIndex;
+    const adjustment=distance===0?1:distance===1?0:-1;
+    return {classification:'mente',adjustment,cause:'FINAL_MENTE',lastTonicIndex,confidence:tonicData.decision.confidence};
+  }
+  const classification=lastWordStress(clean);
+  const tonicData=lexicalTonicData(clean);
+  return {classification,adjustment:STRESS_ADJ[classification],cause:`FINAL_${classification.toUpperCase()}`,lastTonicIndex:tonicIndex(clean),confidence:tonicData.decision.confidence};
+}
+
+function analyzeMetricSegment(words) {
+  const sylData=applySinalefa(words);
+  const finalAdjustment=getFinalAdjustment(words[words.length-1].word);
+  const baseCount=countPoetic(sylData);
+  return {words,sylData,baseCount,finalAdjustment,count:baseCount+finalAdjustment.adjustment};
+}
+
+function findSevenSevenHemistichs(words) {
+  const candidates=[];
+  for(let boundary=1;boundary<words.length;boundary++) {
+    const left=analyzeMetricSegment(words.slice(0,boundary));
+    const right=analyzeMetricSegment(words.slice(boundary));
+    if(left.count===7&&right.count===7) candidates.push({boundary,left,right});
+  }
+  if(!candidates.length) return null;
+  return candidates.sort((a,b)=>
+    (a.left.sylData.some(item=>item.sinalefaAlternative)?1:0)+(a.right.sylData.some(item=>item.sinalefaAlternative)?1:0)-
+    (b.left.sylData.some(item=>item.sinalefaAlternative)?1:0)-(b.right.sylData.some(item=>item.sinalefaAlternative)?1:0))[0];
 }
 
 /* ── Line analysis ──────────────────────────────────────── */
-function analyzeLine(line) {
+function analyzeLineForPolicy(line) {
   const raw = tokenize(line);
   if (!raw.length) return null;
   const ws = raw.map(tok => {
@@ -1007,21 +1348,103 @@ function analyzeLine(line) {
     const {syls:s2,marks:dm} = applyDieresis(s1);
     return {...tok, syllables:s2, sineresis:sm, dieresis:dm};
   });
-  let sylData = applySinalefa(ws);
-  const stress  = lastWordStress(ws[ws.length-1].word);
-  const adj     = STRESS_ADJ[stress];
-  let cesuraIdx = -1;
-  if (countPoetic(sylData)+adj === 14) {
-    cesuraIdx = detectCesura(sylData);
-    if (cesuraIdx >= 0 && sylData[cesuraIdx].sinalefa)
-      sylData[cesuraIdx] = {...sylData[cesuraIdx], sinalefa:false, hiatoMetrico:true};
+  const compound=findSevenSevenHemistichs(ws);
+  let sylData,finalAdjustment,stress,adj,cesuraIdx=-1,hemistichs=[];
+  if(compound) {
+    const leftData=compound.left.sylData.map(item=>({...item}));
+    leftData[leftData.length-1]={...leftData[leftData.length-1],wordBreak:true,cesura:true,sinalefa:false};
+    sylData=[...leftData,...compound.right.sylData.map(item=>({...item}))];
+    cesuraIdx=leftData.length-1;
+    adj=compound.left.finalAdjustment.adjustment+compound.right.finalAdjustment.adjustment;
+    finalAdjustment={...compound.right.finalAdjustment,cause:'FINAL_COMPUESTO_7_7',confidence:
+      compound.left.finalAdjustment.confidence==='bajo'||compound.right.finalAdjustment.confidence==='bajo'?'bajo':
+      compound.left.finalAdjustment.confidence==='medio'||compound.right.finalAdjustment.confidence==='medio'?'medio':'alto'};
+    stress=finalAdjustment.classification;
+    hemistichs=[compound.left,compound.right].map((segment,index)=>({
+      index:index+1,count:segment.count,baseCount:segment.baseCount,
+      adjustment:segment.finalAdjustment.adjustment,adjustmentCause:segment.finalAdjustment.cause,
+      text:segment.words.map(item=>item.word).join(' ')
+    }));
+  } else {
+    sylData=applySinalefa(ws);
+    finalAdjustment=getFinalAdjustment(ws[ws.length-1].word);
+    stress=finalAdjustment.classification;
+    adj=finalAdjustment.adjustment;
   }
   const baseCount = countPoetic(sylData);
-  const tonicMap  = buildMetricTonicMap(ws, sylData);
+  const tonicData = buildMetricTonicData(ws, sylData);
+  const confidenceRank={alto:3,medio:2,bajo:1};
+  const lowerConfidence=(values)=>values.reduce((lowest,value)=>
+    confidenceRank[value]<confidenceRank[lowest]?value:lowest,'alto');
+  const rhythmicConfidence=tonicData.details.reduce((lowest,item)=>
+    confidenceRank[item.confidence]<confidenceRank[lowest]?item.confidence:lowest,'alto');
+  const metricConfidence=lowerConfidence([
+    finalAdjustment.confidence,
+    ...tonicData.details.map(item=>item.sinalefaConfidence||'alto')
+  ]);
+  const globalConfidence=lowerConfidence([metricConfidence,rhythmicConfidence]);
+  const metricAmbiguities=tonicData.details.filter(item=>item.alternativeReading)
+    .map(item=>`Posición ${item.position}: ${item.sinalefaReason}`);
+  const rhythmicAmbiguities=tonicData.details.filter(item=>item.requiresDisambiguation)
+    .map(item=>`Posición ${item.position}: tonicidad contextual`);
+  let alternativeBaseCounts=new Set([baseCount]);
+  sylData.filter(item=>item.sinalefaAlternative).forEach(item=>{
+    const delta=item.sinalefa?1:-1;
+    alternativeBaseCounts=new Set([...alternativeBaseCounts,...[...alternativeBaseCounts].map(value=>value+delta)]);
+  });
+  const primaryCount=baseCount+adj;
+  const alternativeScansions=[...alternativeBaseCounts]
+    .map(value=>value+adj).filter(value=>value>0&&value!==primaryCount)
+    .sort((a,b)=>a-b).map(count=>({count,cause:'LECTURA_ALTERNATIVA_SINALEFA_DIALEFA',changes:[...metricAmbiguities]}));
   return {
-    words:ws.map(t=>t.word), wordSyllables:ws, sylData, tonicMap,
-    baseCount, stress, adjustment:adj, count:baseCount+adj, cesuraIdx
+    words:ws.map(t=>t.word), wordSyllables:ws, sylData,
+    tonicMap:tonicData.map,tonicDetails:tonicData.details,
+    analysisConfidence:globalConfidence,globalConfidence,metricConfidence,rhythmicConfidence,
+    metricAmbiguities,rhythmicAmbiguities,
+    criticalAmbiguities:[...metricAmbiguities,...rhythmicAmbiguities],
+    nonCriticalAmbiguities:[],
+    alternativeScansions,
+    requiresDisambiguation:metricAmbiguities.length>0||rhythmicAmbiguities.length>0,
+    baseCount,stress,adjustment:adj,adjustmentCause:finalAdjustment.cause,
+    hemistichs,isCompound:hemistichs.length===2,
+    lastTonicIndex:finalAdjustment.lastTonicIndex,count:baseCount+adj,cesuraIdx
   };
+}
+
+function automaticScansionScore(result, policy) {
+  if (!result) return Number.NEGATIVE_INFINITY;
+  let score=0;
+  const confidenceValue={alto:3,medio:2,bajo:0};
+  score+=(confidenceValue[result.globalConfidence]||0)*2;
+  score-=result.criticalAmbiguities.length*2;
+  if (result.count===14 && result.isCompound) score+=12;
+  else if (result.count===11 && result.tonicMap?.[9]) score+=9;
+  else if (result.count===8 && result.tonicMap?.[6]) score+=8;
+  else if ([7,9,10,12].includes(result.count)) score+=4;
+  // En igualdad lingüística se conserva la unión normativa, sin forzar la medida.
+  if (policy==='normativa') score+=0.1;
+  return score;
+}
+
+function analyzeLine(line) {
+  const previous=METRIC_OPTIONS.sinalefaPolicy;
+  METRIC_OPTIONS.sinalefaPolicy='normativa';
+  const normative=analyzeLineForPolicy(line);
+  METRIC_OPTIONS.sinalefaPolicy='conservadora';
+  const conservative=analyzeLineForPolicy(line);
+  METRIC_OPTIONS.sinalefaPolicy=previous;
+  if (!normative) return conservative;
+  if (!conservative) return normative;
+  const normativeScore=automaticScansionScore(normative,'normativa');
+  const conservativeScore=automaticScansionScore(conservative,'conservadora');
+  const chosen=conservativeScore>normativeScore?conservative:normative;
+  const alternate=chosen===normative?conservative:normative;
+  chosen.sinalefaPolicySelected=chosen===normative?'normativa':'conservadora';
+  if (alternate.count!==chosen.count && !chosen.alternativeScansions.some(item=>item.count===alternate.count)) {
+    chosen.alternativeScansions.push({count:alternate.count,cause:'LECTURA_AUTOMATICA_ALTERNATIVA',changes:[`Lectura ${chosen===normative?'conservadora':'normativa'}`]});
+    chosen.alternativeScansions.sort((a,b)=>a.count-b.count);
+  }
+  return chosen;
 }
 
 /* ── Rhyme ──────────────────────────────────────────────── */
@@ -1029,10 +1452,8 @@ function getRhymeSounds(word) {
   const clean=word.replace(STRIP_PUNCT,'').toLowerCase().trim();
   if (!clean) return {consonant:'',assonant:''};
   if (isNumber(clean)) return {consonant:clean,assonant:clean};
-  if (isYFinal(clean)) { const w=clean.slice(0,-1)+'i'; return {consonant:w,assonant:w}; }
   const syls=syllabifyCached(clean), n=syls.length;
-  let idx=syls.findIndex(s=>/[áéíóú]/.test(s));
-  if (idx===-1) idx=Math.max(0,/[aeioun s]/.test(clean.slice(-1))?n-2:n-1);
+  const idx=Math.max(0,tonicIndex(clean));
   const part=syls.slice(idx).join('');
   return {
     consonant:[...part].map(unaccent).join(''),
@@ -1061,23 +1482,59 @@ function assignRhymes(results) {
 
 /* ── Render ─────────────────────────────────────────────── */
 function renderDivided(sylData, cesuraIdx, tonicMap, sinMarks=[], dieMarks=[]) {
-  // Motor interno completo — interfaz limpia para el usuario
-  const parts = [];
+  // Una celda visible por cada posición métrica; la sinalefa conserva sus dos fuentes.
+  if (!Array.isArray(sylData) || !sylData.length) return '<div class="syl-line"><span class="syl-readable">Sin división disponible</span></div>';
+  const units = [];
   let i = 0;
   while (i < sylData.length) {
     const cur = sylData[i];
     if (cur.sinalefa && i + 1 < sylData.length) {
-      parts.push(cur.text + sylData[i+1].text);
+      units.push({text:`${String(cur.text||'')}‿${String(sylData[i+1].text||'')}`,end:i+1,sinalefa:true});
       i += 2;
     } else {
-      parts.push(cur.text);
+      units.push({text:String(cur.text||''),end:i,sinalefa:false});
       i++;
     }
   }
-  const SEP = '<span style="color:var(--ink30);margin:0 3px;font-size:.85em">·</span>';
-  return '<div class="syl-line">'
-    + parts.filter(Boolean).map(p => `<span>${p}</span>`).join(SEP)
-    + '</div>';
+  const cells=units.filter(unit=>unit.text).map((unit,index)=>{
+    const tonic=Array.isArray(tonicMap)&&tonicMap[index];
+    const cell=`<span class="syl-cell${tonic?' is-tonic':''}" title="Sílaba métrica ${index+1}${tonic?' · tónica':''}${unit.sinalefa?' · sinalefa':''}"><span class="syl-index">${index+1}</span><span class="syl-text">${escHtml(unit.text)}</span></span>`;
+    return cell+(unit.end===cesuraIdx?'<span class="syl-cesura" title="Cesura">‖</span>':'');
+  }).join('');
+  const readable=units.filter(unit=>unit.text).map(unit=>escHtml(unit.text)+(unit.end===cesuraIdx?' ‖ ':'')).join(' – ');
+  return `<div class="syl-line"><div class="syl-readable">${readable}</div>${cells}<small class="syl-legend">Cada recuadro es una sílaba métrica · dorado = tónica · ‿ = sinalefa · ‖ = cesura</small></div>`;
+}
+
+function primaryDivisionText(result) {
+  if (Array.isArray(result?.sylData) && result.sylData.length) {
+    const units=[];
+    for (let i=0;i<result.sylData.length;i++) {
+      const current=result.sylData[i];
+      if (current.sinalefa && i+1<result.sylData.length) {
+        units.push(`${String(current.text||'')}‿${String(result.sylData[++i].text||'')}`);
+      } else units.push(String(current.text||''));
+      if (i===result.cesuraIdx) units.push('‖');
+    }
+    return units.filter(Boolean).join(' – ');
+  }
+  // Respaldo: división gramatical directa si faltara la estructura métrica.
+  return (result?.wordSyllables||[])
+    .map(word=>(word.syllables||[]).map(String).join(' – '))
+    .filter(Boolean).join(' / ');
+}
+
+function renderPrimaryScan(results, targetId) {
+  const target=document.getElementById(targetId);
+  if (!target) return;
+  const valid=results.filter(Boolean);
+  const pattern=valid.map(result=>result.rhymeLabel||'—').join(' · ')||'—';
+  const rows=valid.map(result=>{
+    const division=primaryDivisionText(result)||'División no disponible';
+    const rhymeType=result.rhymeType==='c'?'consonante':result.rhymeType==='a'?'asonante':'sin correspondencia';
+    return `<article class="scan-primary-row"><div class="scan-primary-division">${escHtml(division)}</div><div class="scan-primary-count">${result.count}</div><div class="scan-primary-rhyme">${escHtml(String(result.rhymeLabel||'—'))}<small style="display:block;font-size:.55rem;color:var(--ink50)">${rhymeType}</small></div><div class="scan-primary-policy">Sinalefa automática: ${escHtml(String(result.sinalefaPolicySelected||'normativa'))}</div></article>`;
+  }).join('');
+  const head='<div class="scan-primary-head"><span>División silábica</span><span>Sílabas</span><span>Patrón de rima</span></div>';
+  target.innerHTML=`<h2>División en sílabas y patrón de rimas</h2><div class="scan-primary-pattern">Patrón general: ${escHtml(pattern)}</div>${head}<div class="scan-primary-list">${rows||'<div class="scan-primary-row"><span>No se encontraron versos analizables.</span></div>'}</div>`;
 }
 
 
@@ -1118,63 +1575,76 @@ function analyzePoem() {
   const total    = valid.length;
   const totalSyl = counts.reduce((a,b)=>a+b,0);
   const avg      = (totalSyl/total).toFixed(1);
-  const minC     = Math.min(...counts), maxC=Math.max(...counts);
   const dominant = [...new Set(counts)].sort((a,b)=>counts.filter(x=>x===b).length-counts.filter(x=>x===a).length)[0];
   const isIso    = new Set(counts).size === 1;
   const patron   = isIso ? 'Regular' : 'Irregular';
   const tendencia= VERSE_NAMES[dominant] ? VERSE_NAMES[dominant].replace('ílabo','').replace('ísílabo','') : dominant+' síl.';
-  const rhymePattern = valid.map(r => r.rhymeLabel||'—').join('');
+  const rhymePatternReadable = valid.map(r => r.rhymeLabel||'—').join(' · ');
+  renderPrimaryScan(results,'sv-'+tid);
 
   document.getElementById('mg-'+tid).innerHTML=`
-    <div class="metric-card"><div class="metric-value">${totalSyl}</div><div class="metric-label">Total síl.</div></div>
     <div class="metric-card"><div class="metric-value">${avg}</div><div class="metric-label">Promedio</div></div>
-    <div class="metric-card"><div class="metric-value">${minC}</div><div class="metric-label">Mínimo</div></div>
-    <div class="metric-card"><div class="metric-value">${maxC}</div><div class="metric-label">Máximo</div></div>
     <div class="metric-card"><div class="metric-value">${patron}</div><div class="metric-label">Patrón</div></div>
-    <div class="metric-card"><div class="metric-value">${tendencia}</div><div class="metric-label">Tendencia</div></div>
-    <div class="metric-card"><div class="metric-value">${rhymePattern}</div><div class="metric-label">Rima</div></div>`;
+    <div class="metric-card"><div class="metric-value">${tendencia}</div><div class="metric-label">Tendencia</div></div>`;
+  const rhymePatternEl=document.getElementById('rp-'+tid);
+  if (rhymePatternEl) rhymePatternEl.textContent=rhymePatternReadable||'—';
 
   /* Chart */
   const maxBar = Math.max(...counts, 1);
   const barHeight = 180;
-  function detectRitmoBar(tonicMap, count) {
+  function detectRitmoBar(tonicMap,count,tonicDetails=[]) {
     const mm = Array.isArray(tonicMap) ? tonicMap : Object.keys(tonicMap).map(Number).sort((a,b)=>a-b).map(i=>!!tonicMap[i]);
     const has = n => n>=1 && n<=mm.length && mm[n-1]===true;
     const t = mm.map((v,i)=>v?i+1:null).filter(Boolean);
-    if (!t.length) return 'Irregular';
-    if (count>=10&&count<=12) {
-      function score(req, bon, forb) {
-        let s=0;
-        for (const n of req)  s += has(n) ? 3 : -2;
-        for (const n of bon)  s += has(n) ? 1 : 0;
-        for (const n of forb) s += has(n) ? -3 : 0;
-        return s;
-      }
-      const scores = {
-        'Heroico':  score([2,6],[4,8,10],[3,5]),
-        'Melódico': score([6],[3,5,10],[2,4]),
-        'Sáfico':   score([4,8],[10],[2,3,6]),
-        'Enfático': score([1,6],[10],[2,3,4,5]),
-      };
-      const best = Object.entries(scores).sort((a,b)=>b[1]-a[1])[0];
-      if (best[1] > 0) return best[0];
+    if (!t.length) return 'Sin apoyos';
+    function score(req,bon=[],forb=[]) {
+      if (req.some(n=>!has(n))) return Number.NEGATIVE_INFINITY;
+      let s=req.length*3;
+      for (const n of bon) s+=has(n)?1:0;
+      for (const n of forb) s+=has(n)?-2:0;
+      return s;
     }
-    const evens=t.filter(x=>x%2===0), odds=t.filter(x=>x%2!==0);
-    if (evens.length>=2&&evens.length>odds.length) return 'Yámbico';
-    if (odds.length>=2&&odds.length>evens.length) return 'Trocaico';
-    if (t.filter(x=>(x-1)%3===0).length>=2) return 'Dactílico';
-    return 'Irregular';
+    function qualifiedLabel(label,required) {
+      const supports=required.map(position=>tonicDetails[position-1]).filter(Boolean);
+      if(supports.some(item=>item.requiresDisambiguation||item.confidence==='bajo')) return `Posible ${label}`;
+      if(supports.some(item=>item.confidence==='medio')) return `Probable ${label}`;
+      return label;
+    }
+    if (count===11) {
+      const patterns = {
+        'Heroico':{required:[2,6,10],score:score([2,6,10],[4,8],[3,5])},
+        'Melódico':{required:[3,6,10],score:score([3,6,10],[5],[2,4])},
+        'Sáfico':{required:[4,8,10],score:score([4,8,10],[6],[2,3])},
+        'Enfático':{required:[1,6,10],score:score([1,6,10],[4],[2,3,5])}
+      };
+      const best=Object.entries(patterns).sort((a,b)=>b[1].score-a[1].score)[0];
+      if(best[1].score>0) return qualifiedLabel(best[0],best[1].required);
+      return `Endecasílabo ${t.join('·')}`;
+    }
+    if (count===8) {
+      const patterns={
+        'Trocaico':{required:[3,7],score:score([3,7],[1,5],[2,4,6])},
+        'Dactílico':{required:[1,4,7],score:score([1,4,7],[2,5],[3,6])},
+        'Mixto A':{required:[2,4,7],score:score([2,4,7],[6],[1,3,5])},
+        'Mixto B':{required:[2,5,7],score:score([2,5,7],[3],[1,4,6])}
+      };
+      const best=Object.entries(patterns).sort((a,b)=>b[1].score-a[1].score)[0];
+      return best[1].score>0?qualifiedLabel(best[0],best[1].required):`Octosílabo ${t.join('·')}`;
+    }
+    return `Apoyos ${t.join('·')}`;
   }
   document.getElementById('bc-'+tid).innerHTML = valid.map((r,i) => {
     const h = Math.round(r.count/maxBar*barHeight);
     const isRegular = r.count === 8 || r.count === 11;
     const barColor = isRegular ? '#15803d' : '#b8922a';
-    const ritmo = detectRitmoBar(r.tonicMap, r.count);
-    const RITMO_COLORS = {'Heroico':'#8b3a0f','Melódico':'#15803d','Sáfico':'#1d4ed8','Enfático':'#0369a1','Yámbico':'#b8922a','Trocaico':'#7e22ce','Dactílico':'#be123c','Irregular':'rgba(28,26,22,.4)'};
+    const ritmo=detectRitmoBar(r.tonicMap,r.count,r.tonicDetails);
+    const measureLabel=r.isCompound?`${r.hemistichs[0].count}+${r.hemistichs[1].count}`:`${r.count}`;
+    const alternatives=r.alternativeScansions.length?` — alternativas ${r.alternativeScansions.map(item=>item.count).join('/')}`:'';
+    const RITMO_COLORS = {'Heroico':'#8b3a0f','Melódico':'#15803d','Sáfico':'#1d4ed8','Enfático':'#0369a1','Trocaico':'#7e22ce','Dactílico':'#be123c','Mixto A':'#b45309','Mixto B':'#0f766e'};
     const ritmoColor = RITMO_COLORS[ritmo] || 'rgba(28,26,22,.4)';
     return `<div class="bar-item">
-      <div class="bar-top-num" style="color:${barColor}">${r.count}</div>
-      <div class="bar-area"><div class="bar-fill" style="height:${h}px;background:${barColor}" title="Verso ${i+1}: ${r.count} sílabas — ${ritmo}"></div></div>
+      <div class="bar-top-num" style="color:${barColor}">${measureLabel}</div>
+      <div class="bar-area"><div class="bar-fill" style="height:${h}px;background:${barColor}" title="Verso ${i+1}: ${measureLabel} sílabas${alternatives} — ${ritmo} — métrica ${r.metricConfidence} — ritmo ${r.rhythmicConfidence}${r.requiresDisambiguation?' — requiere revisión':''}"></div></div>
       <div class="bar-lbl" style="color:${ritmoColor};font-weight:600">${ritmo}</div>
     </div>`;
   }).join('');
@@ -1195,16 +1665,21 @@ function analyzePoem() {
     const sign = STRESS_SIGN[r.stress]
       ? `<span style="font-size:.58rem;font-weight:700;vertical-align:super;color:${STRESS_COLOR[r.stress]}">${STRESS_SIGN[r.stress]}</span>`
       : '';
+    const confidenceLabel=`M:${r.metricConfidence} · R:${r.rhythmicConfidence}`;
+    const alternativeLabel=r.alternativeScansions.length?`alt. ${r.alternativeScansions.map(item=>item.count).join('/')}`:'';
+    const countLabel=r.isCompound?`${r.hemistichs[0].count}+${r.hemistichs[1].count}`:`${r.count}`;
     tr.innerHTML=`
       <td class="td-num"      data-label="#">${rowNum}</td>
       <td class="td-original" data-label="Verso">${escHtml(r.line)}</td>
       <td class="td-divided"  data-label="División">${renderDivided(r.sylData,r.cesuraIdx,r.tonicMap,r.sineresisMarks,r.dieresisMarks)}</td>
-      <td class="td-count"    data-label="Sílabas"><span class="count-num">${r.count}</span>${sign}</td>
+      <td class="td-count"    data-label="Sílabas" title="${r.adjustmentCause}; confianza global ${r.globalConfidence}${r.requiresDisambiguation?'; requiere revisión de alternativas':''}"><span class="count-num">${countLabel}</span>${sign}${alternativeLabel?`<small style="display:block;color:var(--rust);font-size:.58rem;margin-top:3px">${alternativeLabel}</small>`:''}<small style="display:block;color:var(--ink50);font-size:.55rem;margin-top:3px">${confidenceLabel}</small></td>
       <td class="td-type"     data-label="Rima"><span style="font-size:1rem;font-weight:600;color:var(--rust)">${r.rhymeLabel||'—'}${r.rhymeLabel&&r.rhymeLabel!=='—'?`<sup style="font-size:.55rem;font-weight:500;color:var(--ink50)">${r.rhymeType||''}</sup>`:''}</span></td>`;
     tbody.appendChild(tr);
   }
 
   setResultsVisible(resultsEl, true);
+  // Presenta primero el resumen, la división silábica y las rimas; el gráfico queda después.
+  if (resultsEl) resultsEl.scrollTop=0;
 }
 
 
