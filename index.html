@@ -181,6 +181,20 @@ table{width:100%;min-width:980px;table-layout:fixed;border-collapse:separate;bor
 .scan-primary-count{color:var(--gold);font-size:var(--type-body);font-weight:700;text-align:center}
 .scan-primary-rhyme{color:var(--rust);font-size:var(--type-body);font-weight:700;text-align:center}
 .scan-primary-policy{grid-column:1/-1;color:var(--ink50);font-size:var(--type-label);font-weight:500;line-height:1.4}
+.rhythm-seismograph{grid-column:1/-1;margin-top:2px;padding-top:10px;border-top:1px solid var(--border)}
+.rhythm-seismograph-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:7px;flex-wrap:wrap}
+.rhythm-seismograph-title{color:var(--ink);font-size:var(--type-label);font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.rhythm-grade{padding:3px 8px;border-radius:999px;background:var(--bg3);color:var(--ink50);font-size:.65rem;font-weight:700}
+.rhythm-grade.confirmed{background:rgba(26,127,55,.1);color:var(--green)}
+.rhythm-grade.probable{background:var(--gold-lt);color:var(--gold)}
+.rhythm-grade.possible,.rhythm-grade.irregular{background:var(--rust-lt);color:var(--rust)}
+.rhythm-scroll{overflow-x:auto;padding-bottom:3px}
+.rhythm-svg{display:block;width:100%;min-width:340px;height:106px;background:rgba(140,149,159,.045);border-radius:4px}
+.rhythm-diagnosis{margin-top:6px;color:var(--ink50);font-size:.67rem;line-height:1.45}
+.rhythm-legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:5px;color:var(--ink30);font-size:.6rem}
+.rhythm-key::before{content:'';display:inline-block;width:7px;height:7px;margin-right:4px;border-radius:50%;background:var(--rust)}
+.rhythm-key.structural::before{background:var(--rust);box-shadow:0 0 0 2px rgba(209,36,47,.18)}
+.rhythm-key.missing::before{background:transparent;border:1px solid var(--rust)}
 @media(max-width:768px){
   .scan-primary-head{display:none}
   .scan-primary-row{grid-template-columns:1fr 1fr;gap:8px}
@@ -395,7 +409,7 @@ tbody tr:hover{background:var(--rust-lt)}
 
   <!-- Footer -->
   <footer class="footer" style="flex-shrink:0">
-    <span>© 2026 Verbium v27.4. Todos los derechos reservados.</span>
+    <span>© 2026 Verbium v27.8. Todos los derechos reservados.</span>
     <span id="footer-folder" style="display:none;color:var(--gold);font-weight:500">📁 <span id="footer-folder-name"></span></span>
     <div class="footer-right">
       <span style="font-family:'Georgia',serif;line-height:1.3;text-align:center;display:inline-block">
@@ -776,8 +790,8 @@ const LETTERS      = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 /* Registro auditable: fuente única de las reglas de acentuación vigentes. */
 const ACCENT_RULES = Object.freeze({
-  version:'2026.08-pack-19',
-  source:'Ribbon de gestión y jerarquía tipográfica uniforme para Verbium v27.4',
+  version:'2026.08-pack-23',
+  source:'Acentos rítmicos rojos y reconocimiento global de rima para Verbium v27.8',
   rules:Object.freeze([
     {id:'AC-01',scope:'prosodia',rule:'En una polisílaba ordinaria, la tilde marca una sílaba tónica; no agota los acentos secundarios de compuestos ni el doble acento de -mente.'},
     {id:'AC-02',scope:'regla general',rule:'Una polisílaba correctamente escrita y sin tilde, acabada en vocal, n o s, se interpreta como llana.'},
@@ -799,7 +813,9 @@ const ACCENT_RULES = Object.freeze({
     {id:'MET-COMP-01',scope:'verso compuesto',rule:'El alejandrino se valida como dos hemistiquios independientes de 7 sílabas, cada uno con su ajuste final y sin sinalefa a través de la cesura.'},
     {id:'RIT-01',scope:'ritmo',rule:'Primero se determina la medida; una etiqueta es confirmada, probable o posible según la confianza de todos sus apoyos obligatorios.'},
     {id:'RIT-END',scope:'endecasílabo',rule:'Solo con medida 11 y acento estructural obligatorio en 10 se puntúan patrones heroico 2-6-10, melódico 3-6-10, sáfico 4-8-10 y enfático 1-6-10.'},
-    {id:'RIT-OCT',scope:'octosílabo',rule:'Solo con medida 8 se puntúan trocaico, dactílico, mixto A 2-4-7 y mixto B 2-5-7; sin coincidencia se muestran apoyos.'}
+    {id:'RIT-OCT',scope:'octosílabo',rule:'Solo con medida 8 se clasifican: trocaico 1-3-5-7, con 7 obligatoria; dactílico 1-4-7; mixto A 2-4-7; y mixto B 2-5-7.'},
+    {id:'RIT-VIS',scope:'visualización',rule:'Cada verso representa sus posiciones métricas como una señal: los picos indican sílabas tónicas y se comparan con los apoyos obligatorios del patrón mejor puntuado.'},
+    {id:'RIM-01',scope:'rima',rule:'Las rimas se agrupan después de analizar el poema completo: igualdad total desde la vocal tónica produce rima consonante; igualdad de vocales produce rima asonante; una terminación sin pareja queda libre.'}
   ])
 });
 
@@ -856,7 +872,7 @@ function getAccentuationRulesReport() {
     syllableEntries:Object.fromEntries(SYLLABLE_LEXICON),
     rhythmPatterns:{
       endecasilabo:{heroico:{required:[2,6,10],optional:[4,8]},melodico:{required:[3,6,10],optional:[5]},safico:{required:[4,8,10],optional:[6]},enfatico:{required:[1,6,10],optional:[4]}},
-      octosilabo:{trocaico:{required:[3,7],optional:[1,5]},dactilico:{required:[1,4,7],optional:[2,5]},mixtoA:{required:[2,4,7],optional:[6]},mixtoB:{required:[2,5,7],optional:[3]}}
+      octosilabo:{trocaico:{positions:[1,3,5,7],required:[7]},dactilico:{positions:[1,4,7],required:[1,4,7]},mixtoA:{positions:[2,4,7],required:[2,4,7]},mixtoB:{positions:[2,5,7],required:[2,5,7]}}
     },
     limitations:[
       'El etiquetado contextual usa heurísticas conservadoras; no sustituye un analizador morfosintáctico completo.',
@@ -1480,21 +1496,28 @@ function getRhymeSounds(word) {
   };
 }
 function assignRhymes(results) {
-  const consMap={}, assoMap={};
+  const entries=results.filter(Boolean).map((result,index)=>({
+    result,index,...getRhymeSounds(result.words[result.words.length-1])
+  }));
+  entries.forEach(entry=>{ entry.result.rhymeLabel='—'; entry.result.rhymeType=''; });
+
+  // La relación se decide con el conjunto completo, no con el orden de llegada.
+  const assonantGroups=new Map();
+  for (const entry of entries) {
+    if (!entry.assonant) continue;
+    if (!assonantGroups.has(entry.assonant)) assonantGroups.set(entry.assonant,[]);
+    assonantGroups.get(entry.assonant).push(entry);
+  }
   let counter=0;
-  for (const r of results.filter(Boolean)) {
-    const {consonant,assonant}=getRhymeSounds(r.words[r.words.length-1]);
-    if (!consonant) { r.rhymeLabel='—'; r.rhymeType=''; continue; }
-    if (consMap[consonant]!==undefined) {
-      r.rhymeLabel=consMap[consonant]; r.rhymeType='c';
-    } else if (assoMap[assonant]!==undefined) {
-      const l=assoMap[assonant];
-      consMap[consonant]=l;
-      r.rhymeLabel=l; r.rhymeType='a';
-    } else {
-      const l=LETTERS[counter++%26];
-      consMap[consonant]=l; assoMap[assonant]=l;
-      r.rhymeLabel=l; r.rhymeType='c';
+  for (const group of assonantGroups.values()) {
+    if (group.length<2) continue;
+    const consonantForms=new Set(group.map(entry=>entry.consonant));
+    const isConsonant=consonantForms.size===1&&group[0].consonant!=='';
+    const baseLetter=LETTERS[counter++%LETTERS.length];
+    const label=isConsonant?baseLetter:baseLetter.toLowerCase();
+    for (const entry of group) {
+      entry.result.rhymeLabel=label;
+      entry.result.rhymeType=isConsonant?'c':'a';
     }
   }
 }
@@ -1542,6 +1565,62 @@ function primaryDivisionText(result) {
     .filter(Boolean).join(' / ');
 }
 
+function evaluateVerseRhythm(tonicMap,count,tonicDetails=[]) {
+  const map=Array.isArray(tonicMap)?tonicMap:[];
+  const has=position=>map[position-1]===true;
+  const observed=map.map((value,index)=>value?index+1:null).filter(Boolean);
+  const definitions=count===11?[
+    {name:'Heroico',required:[2,6,10],optional:[4,8]},
+    {name:'Melódico',required:[3,6,10],optional:[5]},
+    {name:'Sáfico',required:[4,8,10],optional:[6]},
+    {name:'Enfático',required:[1,6,10],optional:[4]}
+  ]:count===8?[
+    {name:'Trocaico',positions:[1,3,5,7],required:[7]},
+    {name:'Dactílico',positions:[1,4,7],required:[1,4,7]},
+    {name:'Mixto A',positions:[2,4,7],required:[2,4,7]},
+    {name:'Mixto B',positions:[2,5,7],required:[2,5,7]}
+  ]:count===14?[{name:'Alejandrino 7+7',required:[6,13],optional:[2,4,9,11]}]:[];
+  if (!definitions.length) return {label:`Acentos ${observed.join('·')||'no detectados'}`,name:'Ritmo libre',required:[],expected:[],observed,percent:null,status:'Lectura',statusClass:'probable',diagnosis:'Mapa descriptivo: esta medida no tiene una plantilla automática cerrada.'};
+  const ranked=definitions.map(definition=>{
+    const positions=definition.positions||definition.required;
+    const optional=definition.optional||[];
+    const matches=positions.filter(has).length;
+    const optionalMatches=optional.filter(has).length;
+    const mandatoryMissing=definition.required.filter(position=>!has(position));
+    return {...definition,positions,matches,mandatoryMissing,percent:Math.round(matches/positions.length*100),score:matches*10+optionalMatches-mandatoryMissing.length*20};
+  }).sort((a,b)=>b.score-a.score||b.percent-a.percent);
+  const best=ranked[0];
+  const supports=best.required.map(position=>tonicDetails[position-1]).filter(Boolean);
+  const lowConfidence=supports.some(item=>item?.requiresDisambiguation||item?.confidence==='bajo');
+  const mediumConfidence=supports.some(item=>item?.confidence==='medio');
+  let status='Irregular',statusClass='irregular';
+  if (!best.mandatoryMissing.length&&best.percent===100&&!lowConfidence&&!mediumConfidence) { status='Confirmado'; statusClass='confirmed'; }
+  else if (!best.mandatoryMissing.length&&best.percent>=75&&!lowConfidence) { status='Probable'; statusClass='probable'; }
+  else if (!best.mandatoryMissing.length) { status='Posible'; statusClass='possible'; }
+  const missing=best.mandatoryMissing;
+  const diagnosis=missing.length?`Faltan apoyos obligatorios en ${missing.join(', ')}.`:`Cumple los apoyos obligatorios; coincidencia del patrón ${best.positions.join('–')}: ${best.percent}%.`;
+  return {label:`${status} ${best.name}`,name:best.name,required:best.required,expected:best.positions,observed,percent:best.percent,status,statusClass,diagnosis};
+}
+
+function renderRhythmSeismograph(result) {
+  const map=Array.isArray(result.tonicMap)?result.tonicMap:[];
+  const length=Math.max(result.count||0,map.length,1);
+  const rhythm=evaluateVerseRhythm(map,result.count,result.tonicDetails||[]);
+  const width=Math.max(340,length*46+28),left=20,right=width-20,baseline=62,peak=20;
+  const step=length>1?(right-left)/(length-1):0;
+  const xAt=index=>left+index*step;
+  const points=Array.from({length},(_,index)=>`${xAt(index)},${map[index]?peak:baseline}`).join(' ');
+  const guides=Array.from({length},(_,index)=>`<line x1="${xAt(index)}" y1="14" x2="${xAt(index)}" y2="68" stroke="rgba(140,149,159,.13)"/><text x="${xAt(index)}" y="88" text-anchor="middle" font-size="10" fill="#8c959f">${index+1}</text>`).join('');
+  const peaks=map.map((tonic,index)=>{
+    if(!tonic) return '';
+    const structural=rhythm.expected.includes(index+1);
+    return `<circle cx="${xAt(index)}" cy="${peak}" r="${structural?5:4}" fill="#d1242f"${structural?' stroke="#ffffff" stroke-width="1.5"':''}><title>Acento tónico en posición ${index+1}${structural?' · apoyo estructural':''}</title></circle>`;
+  }).join('');
+  const missing=rhythm.required.filter(position=>!map[position-1]).map(position=>`<circle cx="${xAt(position-1)}" cy="${peak}" r="5" fill="white" stroke="#d1242f" stroke-width="2"><title>Apoyo esperado ausente en ${position}</title></circle>`).join('');
+  const percentage=rhythm.percent===null?'lectura libre':`${rhythm.percent}% de apoyos`;
+  return `<section class="rhythm-seismograph" aria-label="Sismógrafo rítmico: ${escHtml(rhythm.label)}"><div class="rhythm-seismograph-head"><span class="rhythm-seismograph-title">Sismógrafo rítmico · ${escHtml(rhythm.name)}</span><span class="rhythm-grade ${rhythm.statusClass}">${escHtml(rhythm.status)} · ${percentage}</span></div><div class="rhythm-scroll"><svg class="rhythm-svg" viewBox="0 0 ${width} 100" role="img" aria-label="Picos tónicos en las posiciones ${rhythm.observed.join(', ')||'ninguna'}"><line x1="${left}" y1="${baseline}" x2="${right}" y2="${baseline}" stroke="#afb8c1" stroke-width="1"/>${guides}<polyline points="${points}" fill="none" stroke="#636c76" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>${peaks}${missing}</svg></div><div class="rhythm-diagnosis">Acentos observados: ${rhythm.observed.join('–')||'ninguno'}. ${escHtml(rhythm.diagnosis)}</div><div class="rhythm-legend"><span class="rhythm-key">Acento tónico</span><span class="rhythm-key structural">Apoyo estructural</span><span class="rhythm-key missing">Apoyo esperado ausente</span></div></section>`;
+}
+
 function renderPrimaryScan(results, targetId) {
   const target=document.getElementById(targetId);
   if (!target) return;
@@ -1550,7 +1629,7 @@ function renderPrimaryScan(results, targetId) {
   const rows=valid.map(result=>{
     const division=primaryDivisionText(result)||'División no disponible';
     const rhymeType=result.rhymeType==='c'?'consonante':result.rhymeType==='a'?'asonante':'sin correspondencia';
-    return `<article class="scan-primary-row"><div class="scan-primary-division">${escHtml(division)}</div><div class="scan-primary-count">${result.count}</div><div class="scan-primary-rhyme">${escHtml(String(result.rhymeLabel||'—'))}<small style="display:block;font-size:.55rem;color:var(--ink50)">${rhymeType}</small></div><div class="scan-primary-policy">Sinalefa automática: ${escHtml(String(result.sinalefaPolicySelected||'normativa'))}</div></article>`;
+    return `<article class="scan-primary-row"><div class="scan-primary-division">${escHtml(division)}</div><div class="scan-primary-count">${result.count}</div><div class="scan-primary-rhyme">${escHtml(String(result.rhymeLabel||'—'))}<small style="display:block;font-size:.55rem;color:var(--ink50)">${rhymeType}</small></div><div class="scan-primary-policy">Sinalefa automática: ${escHtml(String(result.sinalefaPolicySelected||'normativa'))}</div>${renderRhythmSeismograph(result)}</article>`;
   }).join('');
   const head='<div class="scan-primary-head"><span>División silábica</span><span>Sílabas</span><span>Patrón de rima</span></div>';
   target.innerHTML=`<h2>División en sílabas y patrón de rimas</h2><div class="scan-primary-pattern">Patrón general: ${escHtml(pattern)}</div>${head}<div class="scan-primary-list">${rows||'<div class="scan-primary-row"><span>No se encontraron versos analizables.</span></div>'}</div>`;
@@ -1611,56 +1690,16 @@ function analyzePoem() {
   /* Chart */
   const maxBar = Math.max(...counts, 1);
   const barHeight = 180;
-  function detectRitmoBar(tonicMap,count,tonicDetails=[]) {
-    const mm = Array.isArray(tonicMap) ? tonicMap : Object.keys(tonicMap).map(Number).sort((a,b)=>a-b).map(i=>!!tonicMap[i]);
-    const has = n => n>=1 && n<=mm.length && mm[n-1]===true;
-    const t = mm.map((v,i)=>v?i+1:null).filter(Boolean);
-    if (!t.length) return 'Sin apoyos';
-    function score(req,bon=[],forb=[]) {
-      if (req.some(n=>!has(n))) return Number.NEGATIVE_INFINITY;
-      let s=req.length*3;
-      for (const n of bon) s+=has(n)?1:0;
-      for (const n of forb) s+=has(n)?-2:0;
-      return s;
-    }
-    function qualifiedLabel(label,required) {
-      const supports=required.map(position=>tonicDetails[position-1]).filter(Boolean);
-      if(supports.some(item=>item.requiresDisambiguation||item.confidence==='bajo')) return `Posible ${label}`;
-      if(supports.some(item=>item.confidence==='medio')) return `Probable ${label}`;
-      return label;
-    }
-    if (count===11) {
-      const patterns = {
-        'Heroico':{required:[2,6,10],score:score([2,6,10],[4,8],[3,5])},
-        'Melódico':{required:[3,6,10],score:score([3,6,10],[5],[2,4])},
-        'Sáfico':{required:[4,8,10],score:score([4,8,10],[6],[2,3])},
-        'Enfático':{required:[1,6,10],score:score([1,6,10],[4],[2,3,5])}
-      };
-      const best=Object.entries(patterns).sort((a,b)=>b[1].score-a[1].score)[0];
-      if(best[1].score>0) return qualifiedLabel(best[0],best[1].required);
-      return `Endecasílabo ${t.join('·')}`;
-    }
-    if (count===8) {
-      const patterns={
-        'Trocaico':{required:[3,7],score:score([3,7],[1,5],[2,4,6])},
-        'Dactílico':{required:[1,4,7],score:score([1,4,7],[2,5],[3,6])},
-        'Mixto A':{required:[2,4,7],score:score([2,4,7],[6],[1,3,5])},
-        'Mixto B':{required:[2,5,7],score:score([2,5,7],[3],[1,4,6])}
-      };
-      const best=Object.entries(patterns).sort((a,b)=>b[1].score-a[1].score)[0];
-      return best[1].score>0?qualifiedLabel(best[0],best[1].required):`Octosílabo ${t.join('·')}`;
-    }
-    return `Apoyos ${t.join('·')}`;
-  }
   document.getElementById('bc-'+tid).innerHTML = valid.map((r,i) => {
     const h = Math.round(r.count/maxBar*barHeight);
     const isRegular = r.count === 8 || r.count === 11;
     const barColor = isRegular ? '#15803d' : '#b8922a';
-    const ritmo=detectRitmoBar(r.tonicMap,r.count,r.tonicDetails);
+    const rhythmEvaluation=evaluateVerseRhythm(r.tonicMap,r.count,r.tonicDetails);
+    const ritmo=rhythmEvaluation.label;
     const measureLabel=r.isCompound?`${r.hemistichs[0].count}+${r.hemistichs[1].count}`:`${r.count}`;
     const alternatives=r.alternativeScansions.length?` — alternativas ${r.alternativeScansions.map(item=>item.count).join('/')}`:'';
-    const RITMO_COLORS = {'Heroico':'#8b3a0f','Melódico':'#15803d','Sáfico':'#1d4ed8','Enfático':'#0369a1','Trocaico':'#7e22ce','Dactílico':'#be123c','Mixto A':'#b45309','Mixto B':'#0f766e'};
-    const ritmoColor = RITMO_COLORS[ritmo] || 'rgba(28,26,22,.4)';
+    const RITMO_COLORS={confirmed:'#1a7f37',probable:'#0969da',possible:'#d1242f',irregular:'#d1242f'};
+    const ritmoColor=RITMO_COLORS[rhythmEvaluation.statusClass]||'rgba(28,26,22,.4)';
     return `<div class="bar-item">
       <div class="bar-top-num" style="color:${barColor}">${measureLabel}</div>
       <div class="bar-area"><div class="bar-fill" style="height:${h}px;background:${barColor}" title="Verso ${i+1}: ${measureLabel} sílabas${alternatives} — ${ritmo} — métrica ${r.metricConfidence} — ritmo ${r.rhythmicConfidence}${r.requiresDisambiguation?' — requiere revisión':''}"></div></div>
